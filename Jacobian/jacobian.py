@@ -1,5 +1,5 @@
 """
-Helper Functions to compute the spectrum of J^T*J and J*J^T, 
+Helper Functions to compute the spectrum of J^T @ J and J @ J^T, 
 were J is the Jacobian of the Neural Network J = df(x)/dx.
 the diagonal J will be of dimension training_data_size*(output_dim*data_dim)
 while the Full J will be of dimension training_data_size*(output_dim*training_data_size*data_dim)
@@ -41,3 +41,96 @@ def compute_jacobian(inputs, output):
 		jacobian[i] = inputs.grad.data
 
 	return torch.transpose(jacobian, dim0=0, dim1=1)
+
+def jacobian_vector_mult(model, data_loader, vec, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
+  '''compute J(J*v)  matrix-vector Mv multiply,  M=JJ* , where J is the jacobian,'''
+
+  # compute J*v
+  Jvecs = []
+  model = model.to("cuda:0")
+  
+  istart = 0
+  iend = istart + batch_size
+
+  for batch, data in enumerate(data_loader):
+    features, _ = data
+    features = features.to(device)
+
+    v = vec[istart:iend].to(device)
+    istart += batch_size
+    iend = istart + batch_size
+
+    features = torch.autograd.Variable(features, requires_grad=True)
+    out = model(features)
+
+    J = compute_jacobian(features, out)# create_graph=True)
+    J = J.reshape(batch_size,num_classes*data_dim)
+    J = J.transpose_(0,1)
+    x = torch.mv(J,v).to('cpu')
+
+    del J
+    torch.cuda.empty_cache()
+    Jvecs.append(x)
+
+    del x
+    torch.cuda.empty_cache()
+
+  JJvec = None
+
+  # compute J(J*v)
+  for batch, data in enumerate(data_loader):
+    features, _ = data
+    features = features.to(device)
+
+    features = torch.autograd.Variable(features, requires_grad=True)
+    out = model(features)
+
+    J = compute_jacobian(features, out)
+    J = J.reshape(batch_size,num_classes*data_dim)
+    Jvec = Jvecs[batch].to(device)
+    x = torch.mv(J, Jvec).to('cpu')
+
+    del J
+    torch.cuda.empty_cache()
+
+    if JJvec is None:
+      JJvec = x
+    else:
+      JJvec = torch.cat((JJvec, x))
+
+    del x
+    torch.cuda.empty_cache()
+
+  del Jvecs
+
+  return JJvec
+
+def jacobian_diagonal(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
+  '''compute J(J*v) diagnonal elements , where J is the jacobian,'''
+
+  # compute Jdiag
+  Jdiag = []
+  model = model.to(device)
+
+  for batch, data in enumerate(data_loader):
+    features, _ = data
+    features = features.to(device)
+
+    features = torch.autograd.Variable(features, requires_grad=True)
+    out = model(features)
+
+    J = compute_jacobian(features, out)# create_graph=True)
+    J = J.view(batch_size,num_classes*data_dim)
+    Jt = J.clone().transpose_(0,1)
+    batch_diag = torch.mm(J,Jt).to('cpu') #
+    del J, Jt
+    torch.cuda.empty_cache()
+
+
+    Jdiag.append(batch_diag.to('cpu').numpy())
+
+    del batch_diag
+    torch.cuda.empty_cache()
+
+  return np.array(Jdiag)
+
