@@ -10,12 +10,16 @@ from torch.autograd.gradcheck import zero_gradients
 def compute_jacobian(inputs, output):
 	"""
 	input: input for the function for which the Jacobian will
-	computed. It will be batch_size*data_dim
+	computed. It will be batch_size*data_dim. Make sure that the
+	input is flagged as requires_grad=True with the torch.autograd.Variable
+	wrapper. 
 
 	output: output of the function for which the Jacobian will
 	be computed. It will be batch_size*classes
 
 	return: Jacobian of dimension batch_size*classes*data_dim
+
+
 	"""
 	assert inputs.requires_grad
 
