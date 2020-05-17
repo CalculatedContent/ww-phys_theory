@@ -58,14 +58,14 @@ def jacobian_diagonal(model, data_loader, batch_size, num_classes=10, device='cu
     out = model(features)
 
     J = compute_jacobian(features, out)# create_graph=True)
-    J = J.view(batch_size,num_classes*data_dim)
+    J = J.reshape(batch_size,num_classes*data_dim)
     Jt = J.clone().transpose_(0,1)
     batch_diag = torch.mm(J,Jt).to('cpu') #
     del J, Jt
     torch.cuda.empty_cache()
 
-
-    Jdiag.append(batch_diag.to('cpu').numpy())
+    for ib in range(batch_size):
+      Jdiag.append(batch_diag[ib, ib].to('cpu').numpy())
 
     del batch_diag
     torch.cuda.empty_cache()
