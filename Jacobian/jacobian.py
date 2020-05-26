@@ -18,8 +18,6 @@ def compute_batch_jacobian(inputs, output):
 	be computed. It will be batch_size*classes
 
 	return: Jacobian of dimension batch_size*classes*data_dim
-
-
 	"""
 	assert inputs.requires_grad
 
@@ -42,7 +40,7 @@ def compute_batch_jacobian(inputs, output):
 
 	return torch.transpose(jacobian, dim0=0, dim1=1)
 
-def construct_J(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
+def construct_J(model, data_loader, batch_size, device='cuda:0', num_classes=10, data_dim = 3*32*32):
 	"""
 	constructs the J matrix from batches.
 	"""
@@ -57,11 +55,12 @@ def construct_J(model, data_loader, batch_size, num_classes=10, device='cuda:0',
 		inputs.requires_grad=True
 		outputs = model(inputs)
 
-		J = compute_batch_jacobian(inputs, ouputs)
+		J = compute_batch_jacobian(inputs, outputs)
 
 		Js.append(J)
 
 	full_J = torch.stack(Js, dim=0)
+	full_J = full_J.reshape(len(train_loader)*batch_size, num_classes*data_dim)
 
 	return full_J
 
