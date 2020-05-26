@@ -7,6 +7,7 @@ dJ(x_i)/dx_j, which will be of dimension training_data_size*(output_dim*training
 The diagonal OF M = J @ J^T or M = J^T @ J is the main diagonal of M.
 """
 
+import torch
 from torch.autograd.gradcheck import zero_gradients
 
 def batch_diagJ(inputs, output):
