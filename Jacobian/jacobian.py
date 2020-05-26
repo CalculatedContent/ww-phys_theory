@@ -103,7 +103,9 @@ def sketch_JJT(J, dim=5000):
 
 	P = torch.empty(dim, n).normal_(mean=0,std=1.)
 
-	M = P @ P.t()
+	P_J = P @ J
+
+	M = P_J @ P_J.t()
 
 	return M
 
