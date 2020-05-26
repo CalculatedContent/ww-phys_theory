@@ -95,5 +95,16 @@ def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0'
 
   return np.array(Jdiag)
 
-def sketch_J(J, dim=5000):
+def sketch_JJT(J, dim=5000):
+	"""
+	Creates a sketch of M = JJT of dimension dim.
+	"""
+	n, _ = J.shape
+
+	P = torch.empty(dim, n).normal_(mean=0,std=1.)
+
+	M = P @ P.t()
+
+	return M
+
 
