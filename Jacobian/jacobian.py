@@ -1,13 +1,15 @@
 """
 Helper Functions to compute the spectrum of J^T @ J and J @ J^T, 
-were J is the Jacobian of the Neural Network J = df(x)/dx.
-the diagonal J will be of dimension training_data_size*(output_dim*data_dim)
-while the Full J will be of dimension training_data_size*(output_dim*training_data_size*data_dim)
+were J is the Jacobian of the Neural Network J = df(x)/dx as a function of it's input (the data, not the weights).
+We clarify some nomenclature. The diagonal Jacobian is constructed of terms only of the form dJ(x_i)/dx_i. 
+It will be of dimension training_data_size*(output_dim*data_dim). The full J will contains terms of the form 
+dJ(x_i)/dx_j, which will be of dimension training_data_size*(output_dim*training_data_size*data_dim)
+The diagonal OF M = J @ J^T or M = J^T @ J is the main diagonal of M.
 """
 
 from torch.autograd.gradcheck import zero_gradients
 
-def compute_batch_jacobian(inputs, output):
+def batch_diagonal_jacobian(inputs, output):
 	"""
 	input: input for the function for which the Jacobian will
 	computed. It will be batch_size*data_dim. Make sure that the
@@ -42,7 +44,7 @@ def compute_batch_jacobian(inputs, output):
 
 def construct_J(model, data_loader, batch_size, device='cuda:0', num_classes=10, data_dim = 3*32*32):
 	"""
-	constructs the J matrix from batches.
+	constructs the diagonal J matrix from batches.
 	"""
 	Js = []
 	model.eval()
@@ -55,7 +57,7 @@ def construct_J(model, data_loader, batch_size, device='cuda:0', num_classes=10,
 		inputs.requires_grad=True
 		outputs = model(inputs)
 
-		J = compute_batch_jacobian(inputs, outputs)
+		J = batch_diagonal_jacobian(inputs, outputs)
 
 		Js.append(J)
 
@@ -64,8 +66,8 @@ def construct_J(model, data_loader, batch_size, device='cuda:0', num_classes=10,
 
 	return full_J
 
-def jacobian_diagonal(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
-  '''compute J(J*v) diagnonal elements , where J is the jacobian,'''
+def diagonal_of_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
+  '''compute J(J*v) diagonal elements , where J is the jacobian,'''
 
   # compute Jdiag
   Jdiag = []
