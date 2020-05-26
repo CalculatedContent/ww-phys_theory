@@ -1,6 +1,4 @@
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.utils.data.dataset import Subset
 
@@ -25,10 +23,10 @@ def get_data(batch_size=100, train_range=None, test_range=None):
                                 download=True)  
   
   if train_range:
-      train_dataset = torch.utils.data.Subset(train_dataset, train_range)
+      train_dataset = Subset(train_dataset, train_range)
 
   if test_range:
-      teat_dataset = torch.utils.data.Subset(test_dataset, test_range)
+      teat_dataset = Subset(test_dataset, test_range)
 
 
   train_loader = DataLoader(dataset=train_dataset, 
