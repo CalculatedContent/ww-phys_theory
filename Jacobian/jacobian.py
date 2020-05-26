@@ -7,7 +7,7 @@ while the Full J will be of dimension training_data_size*(output_dim*training_da
 
 from torch.autograd.gradcheck import zero_gradients
 
-def compute_jacobian(inputs, output):
+def compute_batch_jacobian(inputs, output):
 	"""
 	input: input for the function for which the Jacobian will
 	computed. It will be batch_size*data_dim. Make sure that the
@@ -42,6 +42,28 @@ def compute_jacobian(inputs, output):
 
 	return torch.transpose(jacobian, dim0=0, dim1=1)
 
+def construct_J(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
+	"""
+	constructs the J matrix from batches.
+	"""
+	Js = []
+	model.eval()
+	model = model.to(device)
+
+	for batch, data in enumerate(data_loader):
+		features, _ = data
+
+		inputs = features.to(device)
+		inputs.requires_grad=True
+		outputs = model(inputs)
+
+		J = compute_batch_jacobian(inputs, ouputs)
+
+		Js.append(J)
+
+	full_J = torch.stack(Js, dim=0)
+
+	return full_J
 
 def jacobian_diagonal(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
   '''compute J(J*v) diagnonal elements , where J is the jacobian,'''
@@ -71,4 +93,6 @@ def jacobian_diagonal(model, data_loader, batch_size, num_classes=10, device='cu
     torch.cuda.empty_cache()
 
   return np.array(Jdiag)
+
+def sketch_J(J, dim=5000):
 
