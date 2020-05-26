@@ -9,7 +9,7 @@ The diagonal OF M = J @ J^T or M = J^T @ J is the main diagonal of M.
 
 from torch.autograd.gradcheck import zero_gradients
 
-def batch_diagonal_jacobian(inputs, output):
+def batch_diagJ(inputs, output):
 	"""
 	input: input for the function for which the Jacobian will
 	computed. It will be batch_size*data_dim. Make sure that the
@@ -42,7 +42,7 @@ def batch_diagonal_jacobian(inputs, output):
 
 	return torch.transpose(jacobian, dim0=0, dim1=1)
 
-def construct_J(model, data_loader, batch_size, device='cuda:0', num_classes=10, data_dim = 3*32*32):
+def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes=10, data_dim = 3*32*32):
 	"""
 	constructs the diagonal J matrix from batches.
 	"""
@@ -57,7 +57,7 @@ def construct_J(model, data_loader, batch_size, device='cuda:0', num_classes=10,
 		inputs.requires_grad=True
 		outputs = model(inputs)
 
-		J = batch_diagonal_jacobian(inputs, outputs)
+		J = batch_diagJ(inputs, outputs)
 
 		Js.append(J)
 
@@ -66,7 +66,7 @@ def construct_J(model, data_loader, batch_size, device='cuda:0', num_classes=10,
 
 	return full_J
 
-def diagonal_of_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
+def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
   '''compute J(J*v) diagonal elements , where J is the jacobian,'''
 
   # compute Jdiag
