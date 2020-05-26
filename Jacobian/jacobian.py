@@ -63,7 +63,7 @@ def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes
 		Js.append(J)
 
 	full_J = torch.stack(Js, dim=0)
-	full_J = full_J.reshape(len(train_loader)*batch_size, num_classes*data_dim)
+	full_J = full_J.reshape(len(data_loader)*batch_size, num_classes*data_dim)
 
 	return full_J
 
