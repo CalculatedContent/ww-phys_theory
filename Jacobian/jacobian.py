@@ -154,6 +154,7 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 
 	# We want to rescale M = (M - ((b + a)/2)*I)/((b-a)/2). M needs to be rescaled for Chebyshev basis
 	# This is done in a for loop so I does not need to be made in memory.
+
 	M = M/((b-a)/2)
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
@@ -162,12 +163,15 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 	mu = torch.zeros(m).to(device)
 
 	for l in range(n_vec): #number of vecs
+
 		print("Iteration {} of computing mu".format(l))
 		v0 = torch.empty(n).normal_(mean=0, std=1.).to(device)
+
 		for k in range(m): #cheby degree
 			if k == 0:
 				eta[k] = eta[k] + v0 @ v0
 				vk = M @ v0
+
 			else:
 				eta[k] = eta[k] + v0 @ vk
 				vk = 2* M @ vk - vk
