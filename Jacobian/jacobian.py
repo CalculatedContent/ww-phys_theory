@@ -9,6 +9,8 @@ The diagonal OF M = J @ J^T or M = J^T @ J is the main diagonal of M.
 
 import torch
 from torch.autograd.gradcheck import zero_gradients
+import numpy as np
+import math
 
 def batch_diagJ(inputs, output):
 	"""
@@ -110,10 +112,68 @@ def sketch_JL_JJT(J, dim=5000):
 
 	return M
 
-def kernel_PM(J):
+def power_method(M, iterations=100):
+	"""
+	Computes the top eigenvalue of a matrix. This needs to be computed for
+	kernel PM.
+	"""
+	n, _ = M.shape
+
+	vk = torch.empty(n).normal_(mean=0, std=1.)
+
+	for i in range(iterations):
+		vk1 = M @ vk
+		vk1_norm = torch.norm(vk1)
+		vk = vk1 / vk1_norm
+
+	top_eig = vk @ M @ vk
+
+	return top_eig
+
+	
+
+
+
+def kernel_PM(J, m, n_vec):
 	"""
 	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
+	
+	input: jacobian matrix J. Degree of Chebyshev expansion, m.
+	Number of vectors, n_vec.
+
+	output: coefficients for the chebyshev expansion.
+
 	"""
-	pass
+
+	M = J @ J.t() #Create correlation matrix
+	n, _ = J.shape
+	I = torch.eye(n)
+
+	a = 0 #smallest eigenvalue of M
+	b = power_method(M) #computes largest eigenvalue of M
+
+	M = (M - ((b + a)/2)*I)/((b-a)/2) #M needs to be rescaled for Chebyshev basis
+
+	zeta = torch.zeros(m)
+	mu = torch.zeros(m)
+
+	for l in range(n_vec): #number of vecs
+		v0 = torch.empty(n).normal_(mean=0, std=1.)
+		for k in range(m): #cheby degree
+			if k == 0:
+				eta[k] = eta[k] + v0 @ v0
+				vk = M @ v0
+			else:
+				eta[k] = eta[k] + v0 @ vk
+				vk = 2* M @ vk - vk
+
+	zeta = zeta/n_vec
+	for k in range(m):
+		if k == 0:
+			mu[k] = 1/(n*math.pi)*zeta[k]
+		else:
+			mu[k] = 2/(n*math.pi)*zeta[k]
+
+	return mu
 
 
