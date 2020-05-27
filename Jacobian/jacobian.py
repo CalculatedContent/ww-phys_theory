@@ -112,14 +112,15 @@ def sketch_JL_JJT(J, dim=5000):
 
 	return M
 
-def power_method(M, iterations=100):
+def power_method(M, iterations=100, device="cpu"):
 	"""
 	Computes the top eigenvalue of a matrix. This needs to be computed for
 	kernel PM.
 	"""
 	n, _ = M.shape
 
-	vk = torch.empty(n).normal_(mean=0, std=1.)
+	M = M.to(device)
+	vk = torch.empty(n).normal_(mean=0, std=1.).to(device)
 
 	for i in range(iterations):
 		vk1 = M @ vk
@@ -134,7 +135,7 @@ def power_method(M, iterations=100):
 
 
 
-def kernel_PM(J, m= 20, n_vec=100):
+def kernel_PM(J, m= 20, n_vec=100, device="cpu"):
 	"""
 	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
 	
@@ -151,19 +152,21 @@ def kernel_PM(J, m= 20, n_vec=100):
 	print("Finished computing M, computing mu")
 	del J
 	n, _ = M.shape
-	I = torch.eye(n)
+
+	M = M.to(device)
+	I = torch.eye(n).to(device)
 
 	a = 0 #smallest eigenvalue of M
-	b = power_method(M) #computes largest eigenvalue of M
+	b = power_method(M, device= device) #computes largest eigenvalue of M
 
 	M = (M - ((b + a)/2)*I)/((b-a)/2) #M needs to be rescaled for Chebyshev basis
 
-	zeta = torch.zeros(m)
-	mu = torch.zeros(m)
+	zeta = torch.zeros(m).to(device)
+	mu = torch.zeros(m).to(device)
 
 	for l in range(n_vec): #number of vecs
 		print("Iteration {} of computing mu".format(l))
-		v0 = torch.empty(n).normal_(mean=0, std=1.)
+		v0 = torch.empty(n).normal_(mean=0, std=1.).to(device)
 		for k in range(m): #cheby degree
 			if k == 0:
 				eta[k] = eta[k] + v0 @ v0
