@@ -114,15 +114,15 @@ def sketch_JL_JJT(J, dim=5000):
 
 	return M
 
-def power_method(M, iterations=100, device="cpu"):
+def power_method(M, iterations=100, device="cuda:0"):
 	"""
 	Computes the top eigenvalue of a matrix. This needs to be computed for
 	kernel PM.
 	"""
 	n, _ = M.shape
 
-	M = M.to(device)
-	vk = torch.empty(n).normal_(mean=0, std=1.).to(device)
+	#M = M.to(device)
+	vk = torch.empty(n).normal_(mean=0, std=1., device=device)
 
 	for i in range(iterations):
 		vk1 = M @ vk
@@ -133,11 +133,10 @@ def power_method(M, iterations=100, device="cpu"):
 
 	del vk
 	del vk1
-	del M
 
 	return top_eig
 
-def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
+def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 	"""
 	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
 	
@@ -151,11 +150,11 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 
 	n, _ = M.shape
 
-	M = M.to(device)
+	#M = M.to(device)
 
 	a = 0 #smallest eigenvalue of M
 	print("Computing top eigenvalue.")
-	b = power_method(M, device= device) #computes largest eigenvalue of M
+	b = power_method(M, device = device) #computes largest eigenvalue of M
 	print("Finished top eigenvalue, computing mu")
 
 	# We want to rescale M = (M - ((b + a)/2)*I)/((b-a)/2). M needs to be rescaled for Chebyshev basis
@@ -167,13 +166,13 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 	    M[i][i] = M[i][i] - (b+a)/2
 	print("Done Rescaling M")
 
-	zeta = torch.zeros(m).to(device)
-	mu = torch.zeros(m).to(device)
+	zeta = torch.zeros(m, device = device)
+	mu = torch.zeros(m, device = device)
 
 	for l in range(n_vec): #number of vecs
 
 		print("Iteration {} of computing mu".format(l))
-		v0 = torch.empty(n).normal_(mean=0, std=1.).to(device)
+		v0 = torch.empty(n).normal_(mean=0, std=1., device=device)
 
 		for k in range(m): #cheby degree
 			if k == 0:
@@ -185,7 +184,7 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 				vk = 2* M @ vk - vk
 
 		del v0
-	del M
+	#del M
 
 	zeta = zeta/n_vec
 	for k in range(m):
