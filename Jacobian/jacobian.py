@@ -146,9 +146,9 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 	n, _ = M.shape
 
 	M = M.to(device)
-	I = torch.eye(n).to(device)
 
 	a = 0 #smallest eigenvalue of M
+	print("Computing top eigenvalue.")
 	b = power_method(M, device= device) #computes largest eigenvalue of M
 	print("Finished top eigenvalue, computing mu")
 
