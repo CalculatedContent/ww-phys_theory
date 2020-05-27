@@ -129,6 +129,9 @@ def power_method(M, iterations=100, device="cpu"):
 
 	top_eig = vk @ M @ vk
 
+	del vk
+	del vk1
+
 	return top_eig
 
 def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
@@ -175,6 +178,8 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 			else:
 				zeta[k] = zeta[k] + v0 @ vk
 				vk = 2* M @ vk - vk
+
+		del v0
 
 	zeta = zeta/n_vec
 	for k in range(m):
