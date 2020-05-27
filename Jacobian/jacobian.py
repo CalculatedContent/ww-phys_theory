@@ -146,7 +146,9 @@ def kernel_PM(J, m= 20, n_vec=100):
 
 	"""
 
+	print("Computing M")
 	M = J @ J.t() #Create correlation matrix
+	print("Finished computing M, computing mu")
 	del J
 	n, _ = M.shape
 	I = torch.eye(n)
@@ -160,6 +162,7 @@ def kernel_PM(J, m= 20, n_vec=100):
 	mu = torch.zeros(m)
 
 	for l in range(n_vec): #number of vecs
+		print("Iteration {} of computing mu".format(l))
 		v0 = torch.empty(n).normal_(mean=0, std=1.)
 		for k in range(m): #cheby degree
 			if k == 0:
