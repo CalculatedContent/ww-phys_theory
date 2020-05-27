@@ -175,7 +175,7 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 	for l in range(n_vec): #number of vecs
 
 		print("Iteration {} of computing mu".format(l))
-		v0 = torch.empty(n).normal_(mean=0, std=1., device=device)
+		v0 = torch.empty(n, device=device).normal_(mean=0, std=1.)
 
 		for k in range(m): #cheby degree
 			if k == 0:
