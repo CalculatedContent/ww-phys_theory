@@ -161,9 +161,9 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 	# This is done in a for loop so I does not need to be made in memory.
 
 	print("Rescaling M")
-	M = M/((b-a)/2)
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
+	M = M/((b-a)/2)
 	print("Done Rescaling M")
 
 	zeta = torch.zeros(m, device = device)
