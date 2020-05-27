@@ -122,7 +122,7 @@ def power_method(M, iterations=100, device="cuda:0"):
 	n, _ = M.shape
 
 	#M = M.to(device)
-	vk = torch.empty(n).normal_(mean=0, std=1., device=device)
+	vk = torch.empty(n, device=device).normal_(mean=0, std=1.)
 
 	for i in range(iterations):
 		vk1 = M @ vk
@@ -163,7 +163,10 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 	print("Rescaling M")
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
-	M = M/((b-a)/2)
+
+	for i in range(n):
+		for j in range(n):
+			M[i][j] = M[i][j]/((b-a)/2)
 	print("Done Rescaling M")
 
 	zeta = torch.zeros(m, device = device)
