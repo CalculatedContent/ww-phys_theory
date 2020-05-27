@@ -100,7 +100,7 @@ def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0'
 
 def sketch_JL_JJT(J, dim=5000):
 	"""
-	Creates a JL sketch of M = JJT of dimension dim.
+	Creates a JL sketch of J of dimension dim, and computes M = J @ JT.
 	"""
 	n, _ = J.shape
 
