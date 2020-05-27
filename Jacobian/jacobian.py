@@ -110,4 +110,10 @@ def sketch_JL_JJT(J, dim=5000):
 
 	return M
 
+def kernel_PM(J):
+	"""
+	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
+	"""
+	pass
+
 
