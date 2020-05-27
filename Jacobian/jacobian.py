@@ -131,11 +131,11 @@ def power_method(M, iterations=100, device="cpu"):
 
 	return top_eig
 
-def kernel_PM(J, m= 20, n_vec=100, device="cpu"):
+def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 	"""
 	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
 	
-	input: jacobian matrix J. Degree of Chebyshev expansion, m.
+	input: jacobian correlation matrix M. Degree of Chebyshev expansion, m.
 	Number of vectors, n_vec.
 
 	output: coefficients for the chebyshev expansion, mu.
@@ -143,10 +143,6 @@ def kernel_PM(J, m= 20, n_vec=100, device="cpu"):
 
 	"""
 
-	print("Computing M")
-	M = J @ J.t() #Create correlation matrix
-	print("Finished computing M, computing top Eigenvalue")
-	del J
 	n, _ = M.shape
 
 	M = M.to(device)
@@ -156,7 +152,10 @@ def kernel_PM(J, m= 20, n_vec=100, device="cpu"):
 	b = power_method(M, device= device) #computes largest eigenvalue of M
 	print("Finished top eigenvalue, computing mu")
 
-	M = (M - ((b + a)/2)*I)/((b-a)/2) #M needs to be rescaled for Chebyshev basis
+	# We want to rescale M = (M - ((b + a)/2)*I)/((b-a)/2). M needs to be rescaled for Chebyshev basis
+	M = M/((b-a)/2)
+	for i in range(n):
+	    M[i][i] = M[i][i] - (b+a)/2
 
 	zeta = torch.zeros(m).to(device)
 	mu = torch.zeros(m).to(device)
