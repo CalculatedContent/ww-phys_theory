@@ -147,7 +147,8 @@ def kernel_PM(J, m= 20, n_vec=100):
 	"""
 
 	M = J @ J.t() #Create correlation matrix
-	n, _ = J.shape
+	del J
+	n, _ = M.shape
 	I = torch.eye(n)
 
 	a = 0 #smallest eigenvalue of M
