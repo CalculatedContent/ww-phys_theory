@@ -169,11 +169,11 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 
 		for k in range(m): #cheby degree
 			if k == 0:
-				eta[k] = eta[k] + v0 @ v0
+				zeta[k] = zeta[k] + v0 @ v0
 				vk = M @ v0
 
 			else:
-				eta[k] = eta[k] + v0 @ vk
+				zeta[k] = zeta[k] + v0 @ vk
 				vk = 2* M @ vk - vk
 
 	zeta = zeta/n_vec
