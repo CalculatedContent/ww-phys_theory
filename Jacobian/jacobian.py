@@ -110,6 +110,8 @@ def sketch_JL_JJT(J, dim=5000):
 
 	M = P_J @ P_J.t()
 
+	del P_J
+
 	return M
 
 def power_method(M, iterations=100, device="cpu"):
