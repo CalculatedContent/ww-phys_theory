@@ -134,14 +134,15 @@ def power_method(M, iterations=100):
 
 
 
-def kernel_PM(J, m, n_vec):
+def kernel_PM(J, m= 20, n_vec=100):
 	"""
 	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
 	
 	input: jacobian matrix J. Degree of Chebyshev expansion, m.
 	Number of vectors, n_vec.
 
-	output: coefficients for the chebyshev expansion.
+	output: coefficients for the chebyshev expansion, mu.
+	They are the coefficients for 1/sqrt(1-t^2)sum_k mu_k T_k(t).
 
 	"""
 
@@ -176,4 +177,4 @@ def kernel_PM(J, m, n_vec):
 
 	return mu
 
-
+#
