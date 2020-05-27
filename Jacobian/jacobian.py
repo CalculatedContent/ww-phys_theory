@@ -131,6 +131,7 @@ def power_method(M, iterations=100, device="cpu"):
 
 	del vk
 	del vk1
+	del M
 
 	return top_eig
 
@@ -158,9 +159,11 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 	# We want to rescale M = (M - ((b + a)/2)*I)/((b-a)/2). M needs to be rescaled for Chebyshev basis
 	# This is done in a for loop so I does not need to be made in memory.
 
+	print("Rescaling M")
 	M = M/((b-a)/2)
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
+	print("Done Rescaling M")
 
 	zeta = torch.zeros(m).to(device)
 	mu = torch.zeros(m).to(device)
@@ -180,6 +183,7 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 				vk = 2* M @ vk - vk
 
 		del v0
+	del M
 
 	zeta = zeta/n_vec
 	for k in range(m):
