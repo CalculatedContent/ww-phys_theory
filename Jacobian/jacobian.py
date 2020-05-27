@@ -153,6 +153,7 @@ def kernel_PM(M, m= 20, n_vec=100, device="cpu"):
 	print("Finished top eigenvalue, computing mu")
 
 	# We want to rescale M = (M - ((b + a)/2)*I)/((b-a)/2). M needs to be rescaled for Chebyshev basis
+	# This is done in a for loop so I does not need to be made in memory.
 	M = M/((b-a)/2)
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
