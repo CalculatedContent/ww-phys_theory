@@ -163,11 +163,12 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 	print("Rescaling M")
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
-
-	for i in range(n):
-		for j in range(n):
-			M[i][j] = M[i][j]/((b-a)/2)
+	
+	# Do this on the cpu, as you need a 2*size(M) to do this
+	M = M/((b-a)/2)
 	print("Done Rescaling M")
+
+	M = M.to(device) #send M to gpu.
 
 	zeta = torch.zeros(m, device = device)
 	mu = torch.zeros(m, device = device)
@@ -184,7 +185,12 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 
 			else:
 				zeta[k] = zeta[k] + v0 @ vk
-				vk = 2* M @ vk - vk
+				# vk = 2* M @ vk - vk
+				# Need to do this to fit on GPU
+				tmp = M @ vk #- vk
+      			tmp = 2*tmp
+      			vk = tmp - vk
+				del tmp
 
 		del v0
 	#del M
