@@ -182,6 +182,8 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 
 	for k in range(n_vec):
 
+		print("Iteration {} of n_vec".format(k))
+
 		v = torch.randint(low=0, high=2, size=n, device=device)
 		v[v == 0] = -1
 		v = v/torch.norm(v)
@@ -189,6 +191,7 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 		T = torch.zeros(m,m, device=device)
 
 		for i in range(m):
+			print("Iteration {} of m".format(i))
 
 			if i == 0:
 				
