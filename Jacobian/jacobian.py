@@ -197,7 +197,7 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 				
 				w = M @ v
 				a = w @ v
-				w = w - a @ v
+				w = w - a*v
 				v_j1 = v
 
 				T[i][i] = a
@@ -216,7 +216,7 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 
 				w = M @ v
 				a = w @ v
-				w = w - a @ v - b*v_j1
+				w = w - a*v - b*v_j1
 				v_j1 = v
 
 				T[i][i] = a
