@@ -191,14 +191,24 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 				zeta[k] = zeta[k] + v0 @ v0
 				vk = M @ v0
 
-			else:
+			elif k == 1:
 				zeta[k] = zeta[k] + v0 @ vk
 				# vk = 2* M @ vk - vk
 				# Need to do this to fit on GPU
 				tmp = M @ vk #- vk
       			tmp = 2*tmp
-      			vk = tmp - vk
+      			vk1 = vk
+      			vk = tmp - v0
 				del tmp
+			else:
+				zeta[k] = zeta[k] + v0 @ vk
+				tmp = M @ vk #- vk
+      			tmp = 2*tmp
+      			p = vk
+      			vk = tmp - vk1
+      			vk1 = p
+				del tmp
+				del p
 
 		del v0
 	#del M
