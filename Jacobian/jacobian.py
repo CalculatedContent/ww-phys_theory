@@ -165,7 +165,7 @@ def power_method(M, iterations=100, device="cuda:0"):
 
 	return top_eig
 
-def SLQ(M, n_vec=20, m=100):
+def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 	"""
 	An implemention of the Stochastic Lanczos Quadrature to compute
 	the spectral density of M = JJ^T.
@@ -182,14 +182,11 @@ def SLQ(M, n_vec=20, m=100):
 
 	for k in range(n_vec):
 
-		v = torch.randint(low=0, high=2, size=n)
+		v = torch.randint(low=0, high=2, size=n, device=device)
 		v[v == 0] = -1
 		v = v/torch.norm(v)
 
-		alphas = torch.zeros(m)
-		betas = torch.zeros(m)
-
-		T = torch.zeros(m,m)
+		T = torch.zeros(m,m, device=device)
 
 		for i in range(m):
 
@@ -210,7 +207,7 @@ def SLQ(M, n_vec=20, m=100):
 				else:
 					#whp new v is orthogonal to others
 					#should i properly orthogonalize?
-					v = torch.randint(low=0, high=2, size=n)
+					v = torch.randint(low=0, high=2, size=n, device=device)
 					v[v==0] = -1 #make it rademacher
 					v = v/torch.norm(v)
 
@@ -221,7 +218,8 @@ def SLQ(M, n_vec=20, m=100):
 				T[i][i] = a
 				T[i-1][i] = b #there is no beta 0
 				T[i][i-1] = b
-		
+
+		T = T.to("cpu") #do eig on CPU, small enough anyway
 		eig, U = torch.symeig(T, eigenvectors = True)
 
 		eigs.append(eig)
