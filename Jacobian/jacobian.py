@@ -176,17 +176,56 @@ def SLQ(M, n_vec=20, m=100):
 	"""
 
 	n, _ = M.shape
-	
+
+
+
+
 	for k in range(n_vec):
-		pass
 
-	
+		v = torch.randint(low=0, high=2, size=n)
+		v[v == 0] = -1
+		v = v/torch.norm(v)
 
+		alphas = torch.zeros(m)
+		betas = torch.zeros(m)
+
+		for i in range(m):
+
+			if i == 0:
+				
+				w = M @ v
+				a = w @ v
+				w = w - a @ v
+				v_j1 = v
+
+				alphas[i] = a
+
+			else:
+				b = torch.norm(w)
+
+				if b ! = 0:
+					v = w/b
+				else:
+					#whp new v is orthogonal to others
+					v = torch.randint(low=0, high=2, size=n)
+					v[v==0] = -1 #make it rademacher
+					v = v/torch.norm(v)
+
+				w = M @ v
+				a = w @ v
+				w = w - a @ v - b*v_j1
+
+				alphas[i] = a
+				betas[i] = b #there is no beta 0
 		
-		
+		#alphas has m entries
+		#betas has m-1 entries (0 index is 0)
+		#Construct T and diagonalize with symeig
+		#create phi
 
-	pass
+	#average over phis
 
+	return phi
 
 def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	"""
