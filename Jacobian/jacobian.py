@@ -165,7 +165,26 @@ def power_method(M, iterations=100, device="cuda:0"):
 
 	return top_eig
 
-def SLQ(M):
+def SLQ(M, n_vec=20, m=100):
+	"""
+	An implemention of the Stochastic Lanczos Quadrature to compute
+	the spectral density of M = JJ^T.
+	input: the correlation matrix of the Jacobian M.
+	optional: number of random vectors, n_vec (default: 20)
+	number of iterations, m (default: 100)
+	output: density of states.
+	"""
+
+	n, _ = M.shape
+	
+	for k in range(n_vec):
+		pass
+
+	
+
+		
+		
+
 	pass
 
 
