@@ -89,30 +89,31 @@ def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0'
  	"""
 
 
-  Jdiag = []
-  model = model.to(device)
+	Jdiag = []
+  	model = model.to(device)
 
-  for batch, data in enumerate(data_loader):
-    features, _ = data
-    features = features.to(device)
+	for batch, data in enumerate(data_loader):
+    	features, _ = data
+    	features = features.to(device)
 
-    features = torch.autograd.Variable(features, requires_grad=True)
-    out = model(features)
+    	features = torch.autograd.Variable(features, requires_grad=True)
+    	out = model(features)
 
-    J = compute_jacobian(features, out)# create_graph=True)
-    J = J.reshape(batch_size,num_classes*data_dim)
-    Jt = J.clone().transpose_(0,1)
-    batch_diag = torch.mm(J,Jt).to('cpu') #
-    del J, Jt
-    torch.cuda.empty_cache()
+    	J = compute_jacobian(features, out)# create_graph=True)
+    	J = J.reshape(batch_size,num_classes*data_dim)
+    	Jt = J.clone().transpose_(0,1)
+    	batch_diag = torch.mm(J,Jt).to('cpu') #
+    	del J, Jt
+   		torch.cuda.empty_cache()
 
     for ib in range(batch_size):
-      Jdiag.append(batch_diag[ib, ib].to('cpu').numpy())
+    	Jdiag.append(batch_diag[ib, ib].to('cpu').numpy())
 
-    del batch_diag
-    torch.cuda.empty_cache()
+	del batch_diag
 
-  return np.array(Jdiag)
+	torch.cuda.empty_cache()
+
+	return np.array(Jdiag)
 
 def sketch_JL_JJT(J, dim=5000):
 	"""
@@ -174,7 +175,6 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 
 	output: coefficients for the chebyshev expansion, mu. They are the coefficients for the Chebyshev series
 	1/sqrt(1-t^2)sum_k mu_k T_k(t).
-
 	"""
 
 	n, _ = M.shape
