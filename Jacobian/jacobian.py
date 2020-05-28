@@ -177,8 +177,8 @@ def SLQ(M, n_vec=20, m=100):
 
 	n, _ = M.shape
 
-
-
+	eigs = []
+	ws = []
 
 	for k in range(n_vec):
 
@@ -189,6 +189,8 @@ def SLQ(M, n_vec=20, m=100):
 		alphas = torch.zeros(m)
 		betas = torch.zeros(m)
 
+		T = torch.zeros(m,m)
+
 		for i in range(m):
 
 			if i == 0:
@@ -198,7 +200,7 @@ def SLQ(M, n_vec=20, m=100):
 				w = w - a @ v
 				v_j1 = v
 
-				alphas[i] = a
+				T[i][i] = a
 
 			else:
 				b = torch.norm(w)
@@ -207,6 +209,7 @@ def SLQ(M, n_vec=20, m=100):
 					v = w/b
 				else:
 					#whp new v is orthogonal to others
+					#should i properly orthogonalize?
 					v = torch.randint(low=0, high=2, size=n)
 					v[v==0] = -1 #make it rademacher
 					v = v/torch.norm(v)
@@ -215,17 +218,20 @@ def SLQ(M, n_vec=20, m=100):
 				a = w @ v
 				w = w - a @ v - b*v_j1
 
-				alphas[i] = a
-				betas[i] = b #there is no beta 0
+				T[i][i] = a
+				T[i-1][i] = b #there is no beta 0
+				T[i][i-1] = b
 		
-		#alphas has m entries
-		#betas has m-1 entries (0 index is 0)
-		#Construct T and diagonalize with symeig
-		#create phi
+		eig, U = torch.symeig(T, eigenvectors = True)
 
-	#average over phis
+		eigs.append(eig)
+		w = torch.zeros(m)
+		for i in range(m):
+			U2 = U @ U
+			w[i] = U2[0,:i]
+		ws.append(w)
 
-	return phi
+	return eigs, ws
 
 def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	"""
