@@ -150,11 +150,19 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 
 	n, _ = M.shape
 
-	#M = M.to(device)
+	# We start with M on cpu
+	M = M.to("cpu")
+	# Clear GPU memory
+	torch.cuda.empty_cache()
 
 	a = 0 #smallest eigenvalue of M
 	print("Computing top eigenvalue.")
+
+	# We want to compute the power method on the GPU
+	M = M.to(device)
 	b = power_method(M, device = device) #computes largest eigenvalue of M
+	M = M.to("cpu")
+
 	print("Finished top eigenvalue, computing mu")
 
 	# We want to rescale M = (M - ((b + a)/2)*I)/((b-a)/2). M needs to be rescaled for Chebyshev basis
