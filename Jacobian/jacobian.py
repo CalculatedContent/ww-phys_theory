@@ -202,7 +202,7 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 			else:
 				b = torch.norm(w)
 
-				if b ! = 0:
+				if b != 0:
 					v = w/b
 				else:
 					#whp new v is orthogonal to others
