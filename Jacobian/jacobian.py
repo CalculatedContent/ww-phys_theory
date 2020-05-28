@@ -48,6 +48,13 @@ def batch_diagJ(inputs, output):
 def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes=10, data_dim = 3*32*32):
 	"""
 	constructs the diagonal J matrix from batches.
+
+	input: model, data_loader, batch_size, device, num_classes, data_dim
+
+	optional arguments: device, num_classes (default 10), data_dim (default: 3072)
+
+	output: diagonal Jacobian of dimension (len(data_loader)*batch_size, num_classes*data_dim)
+
 	"""
 	Js = []
 	model.eval()
@@ -70,9 +77,18 @@ def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes
 	return full_J
 
 def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
-  '''compute J(J*v) diagonal elements , where J is the jacobian,'''
+ 	"""
+ 	Compute the main diagonal of JJ^T, where J is the diagonal Jacobian.
 
-  # compute Jdiag
+	input: model, data_loader, batch_size
+
+	optional arguments: num_classes (default: 10), device (default: cuda:0), data_dim (default: 3072)
+
+	return: Array of len(data_loader)*batch_size with the main diagonal of JJ^T.
+
+ 	"""
+
+
   Jdiag = []
   model = model.to(device)
 
@@ -100,7 +116,14 @@ def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0'
 
 def sketch_JL_JJT(J, dim=5000):
 	"""
-	Creates a JL sketch of J of dimension dim, and computes M = J @ JT.
+	Creates a Johnson-Lindenstrauss sketch of J of dimension dim, and computes M = J @ JT.
+
+	Input: Jacobian, J
+
+	Optional: dim (default: 5000)
+
+	Return: M = PJ @ (PJ)^T, were P is a JL matrix.
+
 	"""
 	n, _ = J.shape
 
@@ -116,8 +139,13 @@ def sketch_JL_JJT(J, dim=5000):
 
 def power_method(M, iterations=100, device="cuda:0"):
 	"""
-	Computes the top eigenvalue of a matrix. This needs to be computed for
-	kernel PM.
+	Computes the top eigenvalue of a matrix. This needs to be computed for kernel PM.
+
+	input: the jacobian correlation matrix, M
+
+	optional: iterations (default: 100), device (default: cuda:0)
+
+	return: the largest eigenvalue of M.
 	"""
 	n, _ = M.shape
 
@@ -141,10 +169,11 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
 	
 	input: jacobian correlation matrix M. Degree of Chebyshev expansion, m.
-	Number of vectors, n_vec.
+	
+	Optional: number of random vectors, n_vec (default:100), device (default: cuda:0), power_it (default: 100)
 
-	output: coefficients for the chebyshev expansion, mu.
-	They are the coefficients for 1/sqrt(1-t^2)sum_k mu_k T_k(t).
+	output: coefficients for the chebyshev expansion, mu. They are the coefficients for the Chebyshev series
+	1/sqrt(1-t^2)sum_k mu_k T_k(t).
 
 	"""
 
@@ -180,7 +209,7 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
 	
-	# Do this on the cpu, as you need a 2*size(M) to do this
+	# This is done on the cpu, as you need a 2*size(M) to do this
 	M = M/((b-a)/2)
 	print("Done Rescaling M")
 
@@ -202,7 +231,7 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 			elif k == 1:
 				zeta[k] = zeta[k] + v0 @ vk
 				# vk = 2* M @ vk - vk
-				# Need to do this to fit on GPU
+				# Need to break up computation to fit on GPU
 				tmp = M @ vk #- vk
 				tmp = 2*tmp
 				vk1 = vk
