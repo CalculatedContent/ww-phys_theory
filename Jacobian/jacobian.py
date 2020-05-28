@@ -77,8 +77,8 @@ def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes
 	return full_J
 
 def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
- 	"""
- 	Compute the main diagonal of JJ^T, where J is the diagonal Jacobian.
+	"""
+	Compute the main diagonal of JJ^T, where J is the diagonal Jacobian.
 
 	input: model, data_loader, batch_size
 
@@ -86,7 +86,7 @@ def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0'
 
 	return: Array of len(data_loader)*batch_size with the main diagonal of JJ^T.
 
- 	"""
+	"""
 
 
 	Jdiag = []
