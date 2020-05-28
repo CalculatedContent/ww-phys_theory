@@ -136,7 +136,7 @@ def power_method(M, iterations=100, device="cuda:0"):
 
 	return top_eig
 
-def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
+def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	"""
 	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
 	
@@ -150,18 +150,26 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 
 	n, _ = M.shape
 
-	# We start with M on cpu
-	M = M.to("cpu")
-	# Clear GPU memory
-	torch.cuda.empty_cache()
-
 	a = 0 #smallest eigenvalue of M
 	print("Computing top eigenvalue.")
 
 	# We want to compute the power method on the GPU
-	M = M.to(device)
-	b = power_method(M, device = device) #computes largest eigenvalue of M
+
+	vk = torch.empty(n, device=device).normal_(mean=0, std=1.)
+
+	for i in range(power_it):
+		vk1 = M @ vk
+		vk1_norm = torch.norm(vk1)
+		vk = vk1 / vk1_norm
+
+	b = vk @ M @ vk
+
+	del vk
+	del vk1
+
 	M = M.to("cpu")
+
+	torch.cuda.empty_cache()
 
 	print("Finished top eigenvalue, computing mu")
 
@@ -196,17 +204,17 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0"):
 				# vk = 2* M @ vk - vk
 				# Need to do this to fit on GPU
 				tmp = M @ vk #- vk
-      			tmp = 2*tmp
-      			vk1 = vk
-      			vk = tmp - v0
+				tmp = 2*tmp
+				vk1 = vk
+				vk = tmp - v0
 				del tmp
 			else:
 				zeta[k] = zeta[k] + v0 @ vk
 				tmp = M @ vk #- vk
-      			tmp = 2*tmp
-      			p = vk
-      			vk = tmp - vk1
-      			vk1 = p
+				tmp = 2*tmp
+				p = vk
+				vk = tmp - vk1
+				vk1 = p
 				del tmp
 				del p
 
