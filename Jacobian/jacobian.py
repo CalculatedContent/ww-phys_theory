@@ -230,7 +230,7 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 		w = torch.zeros(m)
 		for i in range(m):
 			U2 = U @ U
-			w[i] = U2[0,:i]
+			w[i] = U2[0,i]
 		ws.append(w)
 
 	return eigs, ws
