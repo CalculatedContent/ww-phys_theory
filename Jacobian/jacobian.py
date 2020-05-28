@@ -184,7 +184,7 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 
 		print("Iteration {} of n_vec".format(k))
 
-		v = torch.randint(low=0, high=2, size=n, device=device)
+		v = torch.randint(high=2, size=n, device=device)
 		v[v == 0] = -1
 		v = v/torch.norm(v)
 
@@ -210,13 +210,14 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 				else:
 					#whp new v is orthogonal to others
 					#should i properly orthogonalize?
-					v = torch.randint(low=0, high=2, size=n, device=device)
+					v = torch.randint(high=2, size=n, device=device)
 					v[v==0] = -1 #make it rademacher
 					v = v/torch.norm(v)
 
 				w = M @ v
 				a = w @ v
 				w = w - a @ v - b*v_j1
+				v_j1 = v
 
 				T[i][i] = a
 				T[i-1][i] = b #there is no beta 0
