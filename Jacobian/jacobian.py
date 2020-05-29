@@ -183,12 +183,10 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 				T[i][i-1] = b
 
 		T = T.to("cpu") #do eig on CPU, small enough anyway
-		eig, U = torch.symeig(T, eigenvectors = True)
-		eigs.append(eig)
-		w = torch.zeros(m)
-		U2 = U @ U
-		for i in range(m):
-			w[i] = U2[0][i]
+		#eig, U = torch.symeig(T, eigenvectors = True)
+		eig, U = torch.eig(T, eigenvectors = True)
+		eigs.append(eig[:,0])
+		w = U[0,:]**2
 		ws.append(w)
 
 	return eigs, ws
