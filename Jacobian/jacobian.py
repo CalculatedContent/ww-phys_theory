@@ -115,7 +115,7 @@ def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0'
 
 	return np.array(Jdiag)
 
-def sketch_JL_JJT(J, dim=5000):
+def sketch_JL_JJT(J, dim=5000, device="cuda:0"):
 	"""
 	Creates a Johnson-Lindenstrauss sketch of J of dimension dim, and computes M = J @ JT.
 
@@ -128,7 +128,7 @@ def sketch_JL_JJT(J, dim=5000):
 	"""
 	n, _ = J.shape
 
-	P = 1/dim*torch.empty(dim, n).normal_(mean=0,std=1.)
+	P = 1/dim*torch.empty(dim, n, device=device).normal_(mean=0,std=1.)
 
 	P_J = P @ J
 
