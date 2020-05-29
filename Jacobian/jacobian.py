@@ -142,7 +142,7 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 	input: the correlation matrix of the Jacobian M.
 	optional: number of random vectors, n_vec (default: 20)
 	number of iterations, m (default: 100)
-	output: arrays of eigenvalues and densities
+	output: arrays of eigenvalues and densities of size n_vec*m
 	"""
 	n, _ = M.shape
 	eigs = []
