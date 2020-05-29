@@ -48,11 +48,8 @@ def batch_diagJ(inputs, output):
 def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes=10, data_dim = 3*32*32):
 	"""
 	constructs the diagonal J matrix from batches.
-
 	input: model, data_loader, batch_size, device, num_classes, data_dim
-
 	optional arguments: device, num_classes (default 10), data_dim (default: 3072)
-
 	output: diagonal Jacobian of dimension (len(data_loader)*batch_size, num_classes*data_dim)
 
 	"""
@@ -62,13 +59,10 @@ def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes
 
 	for batch, data in enumerate(data_loader):
 		features, _ = data
-
 		inputs = features.to(device)
 		inputs.requires_grad=True
 		outputs = model(inputs)
-
 		J = batch_diagJ(inputs, outputs)
-
 		Js.append(J)
 
 	full_J = torch.stack(Js, dim=0)
@@ -79,26 +73,18 @@ def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes
 def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
 	"""
 	Compute the main diagonal of JJ^T, where J is the diagonal Jacobian.
-
 	input: model, data_loader, batch_size
-
 	optional arguments: num_classes (default: 10), device (default: cuda:0), data_dim (default: 3072)
-
 	return: Array of len(data_loader)*batch_size with the main diagonal of JJ^T.
-
 	"""
-
-
 	Jdiag = []
 	model = model.to(device)
 
 	for batch, data in enumerate(data_loader):
 		features, _ = data
 		features = features.to(device)
-
 		features = torch.autograd.Variable(features, requires_grad=True)
 		out = model(features)
-
 		J = compute_jacobian(features, out)# create_graph=True)
 		J = J.reshape(batch_size,num_classes*data_dim)
 		Jt = J.clone().transpose_(0,1)
@@ -110,7 +96,6 @@ def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0'
 		Jdiag.append(batch_diag[ib, ib].to('cpu').numpy())
 
 	del batch_diag
-
 	torch.cuda.empty_cache()
 
 	return np.array(Jdiag)
@@ -118,22 +103,14 @@ def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0'
 def sketch_JL_JJT(J, dim=5000, device="cuda:0"):
 	"""
 	Creates a Johnson-Lindenstrauss sketch of J of dimension dim, and computes M = J @ JT.
-
 	Input: Jacobian, J
-
 	Optional: dim (default: 5000)
-
 	Return: M = PJ @ (PJ)^T, were P is a JL matrix.
-
 	"""
 	n, _ = J.shape
-
 	P = 1/dim*torch.empty(dim, n, device=device).normal_(mean=0,std=1.)
-
 	P_J = P @ J
-
 	M = P_J @ P_J.t()
-
 	del P_J
 
 	return M
@@ -141,16 +118,11 @@ def sketch_JL_JJT(J, dim=5000, device="cuda:0"):
 def power_method(M, iterations=100, device="cuda:0"):
 	"""
 	Computes the top eigenvalue of a matrix. This needs to be computed for kernel PM.
-
 	input: the jacobian correlation matrix, M
-
 	optional: iterations (default: 100), device (default: cuda:0)
-
 	return: the largest eigenvalue of M.
 	"""
 	n, _ = M.shape
-
-	#M = M.to(device)
 	vk = torch.empty(n, device=device).normal_(mean=0, std=1.)
 
 	for i in range(iterations):
@@ -159,7 +131,6 @@ def power_method(M, iterations=100, device="cuda:0"):
 		vk = vk1 / vk1_norm
 
 	top_eig = vk @ M @ vk
-
 	del vk
 	del vk1
 
@@ -167,44 +138,32 @@ def power_method(M, iterations=100, device="cuda:0"):
 
 def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 	"""
-	An implemention of the Stochastic Lanczos Quadrature to compute
-	the spectral density of M = JJ^T.
+	An implemention of the Stochastic Lanczos Quadrature to compute the spectral density of M = JJ^T.
 	input: the correlation matrix of the Jacobian M.
 	optional: number of random vectors, n_vec (default: 20)
 	number of iterations, m (default: 100)
-	output: density of states.
+	output: arrays of eigenvalues and densities
 	"""
-
 	n, _ = M.shape
-
 	eigs = []
 	ws = []
 
 	for k in range(n_vec):
-
 		print("Iteration {} of n_vec".format(k))
-
 		v = torch.randint(high=2, size=(n,), device=device, dtype=torch.float32)
 		v[v == 0] = -1
 		v = v/torch.norm(v)
-
 		T = torch.zeros(m,m, device=device)
 
 		for i in range(m):
-			print("Iteration {} of m".format(i))
-
 			if i == 0:
-				
 				w = M @ v
 				a = w @ v
 				w = w - a*v
 				v_j1 = v
-
 				T[i][i] = a
-
 			else:
 				b = torch.norm(w)
-
 				if b != 0:
 					v = w/b
 				else:
@@ -225,7 +184,6 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 
 		T = T.to("cpu") #do eig on CPU, small enough anyway
 		eig, U = torch.symeig(T, eigenvectors = True)
-
 		eigs.append(eig)
 		w = torch.zeros(m)
 		U2 = U @ U
@@ -237,67 +195,48 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 
 def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	"""
-	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yaang.
-	
+	An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yang.
 	input: jacobian correlation matrix M. Degree of Chebyshev expansion, m.
-	
-	Optional: number of random vectors, n_vec (default:100), device (default: cuda:0), power_it (default: 100)
-
+	optional: number of random vectors, n_vec (default:100), device (default: cuda:0), power_it (default: 100)
 	output: coefficients for the chebyshev expansion, mu. They are the coefficients for the Chebyshev series
 	1/sqrt(1-t^2)sum_k mu_k T_k(t).
 	"""
-
 	n, _ = M.shape
-
 	a = 0 #smallest eigenvalue of M
 	print("Computing top eigenvalue.")
-
 	# We want to compute the power method on the GPU
-
 	vk = torch.empty(n, device=device).normal_(mean=0, std=1.)
-
 	for i in range(power_it):
 		vk1 = M @ vk
 		vk1_norm = torch.norm(vk1)
 		vk = vk1 / vk1_norm
-
 	b = vk @ M @ vk
-
 	del vk
 	del vk1
-
 	M = M.to("cpu")
-
 	torch.cuda.empty_cache()
-
 	print("Finished top eigenvalue, computing mu")
 
 	# We want to rescale M = (M - ((b + a)/2)*I)/((b-a)/2). M needs to be rescaled for Chebyshev basis
 	# This is done in a for loop so I does not need to be made in memory.
-
 	print("Rescaling M")
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
-	
 	# This is done on the cpu, as you need a 2*size(M) to do this
 	M = M/((b-a)/2)
 	print("Done Rescaling M")
-
 	M = M.to(device) #send M to gpu.
 
 	zeta = torch.zeros(m, device = device)
 	mu = torch.zeros(m, device = device)
 
 	for l in range(n_vec): #number of vecs
-
 		print("Iteration {} of computing mu".format(l))
 		v0 = torch.empty(n, device=device).normal_(mean=0, std=1.)
-
 		for k in range(m): #cheby degree
 			if k == 0:
 				zeta[k] = zeta[k] + v0 @ v0
 				vk = M @ v0
-
 			elif k == 1:
 				zeta[k] = zeta[k] + v0 @ vk
 				# vk = 2* M @ vk - vk
@@ -316,17 +255,13 @@ def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 				vk1 = p
 				del tmp
 				del p
-
 		del v0
-	#del M
-
 	zeta = zeta/n_vec
 	for k in range(m):
 		if k == 0:
 			mu[k] = 1/(n*math.pi)*zeta[k]
 		else:
 			mu[k] = 2/(n*math.pi)*zeta[k]
-
 	return mu
 
 #
