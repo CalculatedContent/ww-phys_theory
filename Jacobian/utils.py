@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-def get_data(batch_size=100, train_range=None, test_range=None):
+def get_data(batch_size=100, train_range=None, test_range=None, random_labels=False, seed = 0):
   normalize = transforms.Normalize(mean=[x/255.0 for x in [125.3, 123.0, 113.9]], std=[x / 255.0 for x in [63.0, 62.1, 66.7]])
   transform_train = transforms.Compose([
           transforms.ToTensor(),
@@ -25,7 +25,20 @@ def get_data(batch_size=100, train_range=None, test_range=None):
   test_dataset = datasets.CIFAR10(root='data', 
                                 train=False, 
                                 transform=transform_test,
-                                download=True)  
+                                download=True)
+  if random_labels:
+    print("generating random labels with seed {}".format(seed))
+    np.random.seed(seed)
+
+    probability_of_random = 1.0
+    labels = np.array(train_dataset.targets) 
+    mask = np.random.rand(len(labels)) <= probability_of_random #create mask of length labels, where entries drawn from [0,1].
+    rnd_labels = np.random.choice(10, mask.sum())               #create random labels 1-10 of length of mask
+    labels[mask] = rnd_labels
+    labels = [int(x) for x in labels]
+    train_dataset.targets = labels                              #assign new random labels to dataset
+    np.savetxt("random_labels.txt", labels)
+
   
   if train_range:
       train_dataset = Subset(train_dataset, train_range)
