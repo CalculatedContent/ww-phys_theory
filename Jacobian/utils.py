@@ -10,11 +10,12 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-def get_data(batch_size=100, 
-            train_range=None, 
-            test_range=None, 
-            random_labels=False, 
-            seed = 0):
+def get_data(
+        batch_size=100, 
+        train_range=None, 
+        test_range=None, 
+        random_labels=False, 
+        seed = 0):
   """Get CIFAR10 data. If random_labels=True, randomizes the labels. 
   Optional Parameters: batch_size (default: 100), train_range (default: None), test_range (default: None), random_labels (default: False), seed (default: None)
   Return: train loader, test loader
@@ -83,11 +84,12 @@ def get_esd_plot(eigenvalues, weights):
   plt.savefig('example.pdf')
 
 
-def density_generate(eigenvalues,
-                     weights,
-                     num_bins=10000,
-                     sigma_squared=1e-5,
-                     overhead=0.01):
+def density_generate(
+        eigenvalues,
+        weights,
+        num_bins=10000,
+        sigma_squared=1e-5,
+        overhead=0.01):
 """Generates the ESD from the eigenvalues and weights from SLQ.
 Input: Eigenvalues, weights
 Optional Arguments: num_bins (default: 10000), sigma_squared (default: 1e-5), overhead (default: 0.01)
