@@ -204,8 +204,8 @@ def slq(M, n_vec=20, m=100, device="cuda:0"):
 				if b != 0:
 					v = w/b
 				else:
-					#whp new v is orthogonal to others
-					#should i properly orthogonalize?
+					#This old bit of code assumes that with high probability, a new random vector will be orthogonal to others.
+					# Leaving in for posterity. 
 					#v = torch.randint(high=2, size=(n,), device=device, dtype=torch.float32)
 					#v[v==0] = -1 #make it rademacher
 					#v = v/torch.norm(v)
