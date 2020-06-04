@@ -10,7 +10,11 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-def get_data(batch_size=100, train_range=None, test_range=None, random_labels=False, seed = 0):
+def get_data(batch_size=100, 
+            train_range=None, 
+            test_range=None, 
+            random_labels=False, 
+            seed = 0):
   """Get CIFAR10 data. If random_labels=True, randomizes the labels. 
   Optional Parameters: batch_size (default: 100), train_range (default: None), test_range (default: None), random_labels (default: False), seed (default: None)
   Return: train loader, test loader
@@ -66,6 +70,7 @@ def get_data(batch_size=100, train_range=None, test_range=None, random_labels=Fa
 
 def get_esd_plot(eigenvalues, weights):
   """Plots the empirical spectral density given the eigenvalues and weights from SLQ.
+  Note: This is taken from the PyHessian code.
   """
   density, grids = density_generate(eigenvalues, weights)
   plt.semilogy(grids, density + 1.0e-7)
@@ -87,6 +92,7 @@ def density_generate(eigenvalues,
 Input: Eigenvalues, weights
 Optional Arguments: num_bins (default: 10000), sigma_squared (default: 1e-5), overhead (default: 0.01)
 Return: Density, grids.
+Note: This is taken from the PyHessian code.
 """
 
   eigenvalues = np.array(eigenvalues)
