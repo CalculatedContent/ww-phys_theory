@@ -148,15 +148,15 @@ def power_method(M, iterations=100, device="cuda:0"):
 
 	return top_eig
 
-def orthonormal(v, v_list):
-	"""This orthonormalizes a vector v against a list of vectors, v_list.
-	Input: A candidate vector, v, and a list of vectors, v_list.
+def orthonormal(v_list):
+	"""This generates a vector x, orthogonal to a set of vectors, v_list.
+	Input: A list of vectors, v_list.
 	Return: Orthogonalized vector, x, orthogonal to the vectors in the list, v_list.
 	The solution to A^Tx = 0 will give this, where A has column-wise entries
 	of v in v_list.
 	"""
 	n = len(v_list)
-	m = v.shape
+	m = len(v_list[0])
 	A = torch.zeros((n, m))
 	b = torch.zeros(n)
 	for i in range(n):
@@ -206,10 +206,11 @@ def slq(M, n_vec=20, m=100, device="cuda:0"):
 				else:
 					#whp new v is orthogonal to others
 					#should i properly orthogonalize?
-					v = torch.randint(high=2, size=(n,), device=device, dtype=torch.float32)
-					v[v==0] = -1 #make it rademacher
-					v = v/torch.norm(v)
-					v = orthonormal(v, vs)
+					#v = torch.randint(high=2, size=(n,), device=device, dtype=torch.float32)
+					#v[v==0] = -1 #make it rademacher
+					#v = v/torch.norm(v)
+
+					v = orthonormal(vs)
 					vs.append(v)
 
 				w = M @ v
