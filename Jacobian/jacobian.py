@@ -112,7 +112,7 @@ def diagonal_JJT(
 
 	return np.array(Jdiag)
 
-def sketch_JL_JJT(J, dim=5000, device="cuda:0"):
+def sketch_jl_JJT(J, dim=5000, device="cuda:0"):
 	"""Creates a Johnson-Lindenstrauss sketch of J of dimension dim, and computes M = J @ JT.
 
 	Input: Jacobian, J
@@ -148,7 +148,7 @@ def power_method(M, iterations=100, device="cuda:0"):
 
 	return top_eig
 
-def SLQ(M, n_vec=20, m=100, device="cuda:0"):
+def slq(M, n_vec=20, m=100, device="cuda:0"):
 	"""An implemention of the Stochastic Lanczos Quadrature to compute the spectral density of M = JJ^T.
 	
 	Input: the correlation matrix of the Jacobian M.
@@ -205,7 +205,7 @@ def SLQ(M, n_vec=20, m=100, device="cuda:0"):
 
 	return eigs, ws
 
-def kernel_PM(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
+def kernel_pm(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	"""An implementation of the Kernel Polynomial Method as outlined in Lin, Saad, Yang.
 
 	Input: Jacobian correlation matrix M. Degree of Chebyshev expansion, m.
