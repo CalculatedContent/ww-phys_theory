@@ -18,7 +18,7 @@ def get_data(
 		seed = 0):
 	"""Get CIFAR10 data. If random_labels=True, randomizes the labels. 
 	Optional Parameters: batch_size (default: 100), train_range (default: None), test_range (default: None), random_labels (default: False), seed (default: None)
-	Return: train loader, test loader
+	Return: train dataset, test dataset, train loader, test loader
 	"""
 	normalize = transforms.Normalize(mean=[x/255.0 for x in [125.3, 123.0, 113.9]], std=[x / 255.0 for x in [63.0, 62.1, 66.7]])
 	transform_train = transforms.Compose([
