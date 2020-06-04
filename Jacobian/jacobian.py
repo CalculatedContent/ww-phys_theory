@@ -46,7 +46,13 @@ def batch_diagJ(inputs, output):
 
 	return torch.transpose(jacobian, dim0=0, dim1=1)
 
-def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes=10, data_dim = 3*32*32):
+def construct_diagJ(
+		model, 
+		data_loader, 
+		batch_size, 
+		device='cuda:0', 
+		num_classes=10, 
+		data_dim = 3*32*32):
 	"""Constructs the diagonal J matrix from batches.
 
 	Input: Model, data_loader, batch_size, device, num_classes, data_dim.
@@ -70,7 +76,13 @@ def construct_diagJ(model, data_loader, batch_size, device='cuda:0', num_classes
 
 	return full_J
 
-def diagonal_JJT(model, data_loader, batch_size, num_classes=10, device='cuda:0', data_dim=3*32*32):
+def diagonal_JJT(
+		model, 
+		data_loader, 
+		batch_size, 
+		num_classes=10, 
+		device='cuda:0', 
+		data_dim=3*32*32):
 	"""Compute the main diagonal of JJ^T, where J is the diagonal Jacobian.
 	
 	Input: Model, data_loader, batch_size
