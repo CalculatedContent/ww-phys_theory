@@ -240,6 +240,8 @@ def kernel_pm(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	1/sqrt(1-t^2)sum_k mu_k T_k(t).
 
 	ToDo: Batch computatoin, Pearlmutter's trick.
+	Note: A lot of tricks were used such that M is only made in memory once. If Pearlmutter's trick is implemented, these
+	tricks could be removed.
 	"""
 	n, _ = M.shape
 	a = 0 #smallest eigenvalue of M
