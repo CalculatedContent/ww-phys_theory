@@ -151,11 +151,19 @@ def power_method(M, iterations=100, device="cuda:0"):
 def orthonormal(v, v_list):
 	"""This orthonormalizes a vector v against a list of vectors, v_list.
 	Input: A candidate vector, v, and a list of vectors, v_list.
-	Return: Orthogonalized vector, v, orthogonal to the vectors in the list, v_list.
+	Return: Orthogonalized vector, x, orthogonal to the vectors in the list, v_list.
 	The solution to A^Tx = 0 will give this, where A has column-wise entries
 	of v in v_list.
 	"""
-	pass
+	n = len(v_list)
+	m = v.shape
+	A = torch.zeros((n, m))
+	b = torch.zeros(n)
+	for i in range(n):
+		A[i, :] = v_list[i]
+	x, _ = torch.solve(b, A.t())
+	x = x/torch.norm(x)
+	return x
 
 
 
@@ -201,6 +209,8 @@ def slq(M, n_vec=20, m=100, device="cuda:0"):
 					v = torch.randint(high=2, size=(n,), device=device, dtype=torch.float32)
 					v[v==0] = -1 #make it rademacher
 					v = v/torch.norm(v)
+					v = orthonormal(v, vs)
+					vs.append(v)
 
 				w = M @ v
 				a = w @ v
