@@ -267,7 +267,7 @@ def kernel_pm(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	# This is done on the cpu, as you need a 2*size(M) to do this
 	M = M/((b-a)/2)
 	print("Done Rescaling M")
-	#M = M.to(device) #send M to gpu.
+	M = M.to(device) #send M to gpu.
 
 	zeta = torch.zeros(m, device = device)
 	mu = torch.zeros(m, device = device)
