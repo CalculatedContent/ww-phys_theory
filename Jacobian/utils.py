@@ -10,6 +10,8 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
+
+
 def get_data(
 		batch_size=100, 
 		train_range=None, 
@@ -126,3 +128,12 @@ def density_generate(
 def gaussian(x, x0, sigma_squared):
 	return np.exp(-(x0 - x)**2 /
 (2.0 * sigma_squared)) / np.sqrt(2 * np.pi * sigma_squared)
+
+class Cheby:
+	"""Class for the weighted Chebyshev series 1/sqrt(1-t^2)sum_k mu_k T_k(t).
+	Uses the coefficients mu to build the weighted chebyshev series.
+	"""
+	def __init__(self, mu):
+		self.Cheb = np.polynomial.chebyshev.Chebyshev(mu)
+	def weighted_chebyshev(self, x):
+		return 1./np.sqrt(1.-x**2)*self.Cheb(x)

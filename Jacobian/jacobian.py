@@ -304,6 +304,6 @@ def kernel_pm(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 			mu[k] = 1/(n*math.pi)*zeta[k]
 		else:
 			mu[k] = 2/(n*math.pi)*zeta[k]
-	return mu
+	return mu.detach().cpu().numpy()
 
 #
