@@ -17,17 +17,30 @@ The incredible size and depth of these models poses a new and deep theoretical c
 Discuss Energy Landscape and  ruggedly convexity
 
 
-% What has been done before
-% Cross Sections
+\nred{What has been done before}
+
+\nred{Cross Sections}
 We do have some insight into how the Energy Landscape behaves by visualizing 2-dimensional
 cross-sections of small models during training, such as ResNet25.
--summarize findings
+Maybe can run ourselves ?
 
-% Empirical Generalization Metrics
+\nred{Analysis of the Hessian}
+Not really informative.  Hessian only provides local information.
+
+
+\nred{Empirical Generalization Metrics}
 Norm-based metrics such as WeightWatcher
+Correlated with generalization / test accuracy.
+Best metric is based on power law / heavy tailed.
+Not explicitly data dependent
 
-% What needs to be done
+
+
+\nred{What needs to be done}
 Cross-Section is not a generalization metric, is not global
+
+Importance of unsupervised metrics: self training
+
 
 In order to characterize the Energy Landscape, traditional approaches attempt to count
 the number of local minima (i.e the complexity).  And while this is well for theoretical
@@ -43,6 +56,8 @@ Similar to the weightwatcher studies..
 Show picture:  compare relatively random / flat vs  a deeply funneled convex Landscape ESDs
 
 random:  real world data, randomly labeled 
+
+
 
 
 Here is a summary of our main results:
@@ -71,6 +86,19 @@ between these initializations, between normal-normal, random-random, and normal-
 
  
 }
+
+
+\paragraph{Funneled Enegy Landscapes}
+\nred{where to put this ?}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.2]{img/funnel.png}
+\end{center}
+\caption{Sample figure caption.}
+\label{fig:funnel}
+\end{figure}
+
+
 
 
 \paragraph{Organization of this paper.}

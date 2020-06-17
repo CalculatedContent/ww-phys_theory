@@ -1,0 +1,77 @@
+%KDD% \vspace{-1mm}
+\section{Methods}
+\label{sxn:methods}
+%\vspace{-1mm}
+
+\nred{start repeated section}
+Let us write the Energy Landscape (or optimization function, parameterized by $\mathbf{W}_{l}$s and $\mathbf{b}_{l}$s) for a DNN with $L$ layers, activation functions $h_{l}(\cdot)$, and $N\times M$ weight matrices $\mathbf{W}_{l}$ and biases $\mathbf{b}_{l}$,~as:
+\begin{equation}
+E_{DNN}=h_{L}(\mathbf{W}_{L}\times h_{L-1}(\mathbf{W}_{L-1}\times h_{L-2}(\cdots)+\mathbf{b}_{L-1})+\mathbf{b}_{L})  .
+\label{eqn:dnn_energy}
+\end{equation}
+Each DNN layer contains one or more layer 2D  $N\times M$ weight matrices, $\mathbf{W}_{l}$, or pre-activation maps, $\mathbf{W}_{i,l}$, extracted from 2D Convolutional layers, and where $N > M$.% 
+\footnote{We do not use intra-layer information from the models in our quality metrics, but (as we will describe) our metrics can be used to learn about intra-layer model properties.}
+(We may drop the $i$ and/or $i,l$ subscripts below.)
+See Appendix~\ref{sxn:appendix} for how we define the Conv2D layer matrixes and for our choices of normalization. 
+
+Assume we are given several pretrained DNNs, e.g., as part of an architecture series.
+The models have been trained and evaluated on labeled data $\{d_{i},y_{i}\}\in\mathcal{D}$, using standard techniques.  
+The pretained pytroch model files are publicly-available, and the test accuracies have been reported online.  
+\nred{end repeated section}
+
+In this study, we have acces to the training and test data, but we do not train the models ourselves;
+
+
+
+%KDD% \vspace{-1mm}
+\paragraph{Data-Dependent Jacobian}
+
+\subparagraph{previous work}
+- regularizartion by diagonal elements
+- Ganguli and Pennington
+
+Ganguli et al. chatacterize the ESD of the Jacobian using a (free) cumulant expansion.
+No need to compute the cumulants we can simplly compute the complete ESD, 
+either using the test data, or on the training data using RandNLA methods.
+(Moreover, the (free) cumulants wiuld be different for a truly heavy tailed $\mathbf{J}$ vs a Gsussian random matrix.
+Gotta think carefully on that but I beleive this is the case, depending on what is evaluated)
+And earlier work suggest this is the case
+
+\nred{move this below?}
+We simply fit the ESD to a Power Law, and characterize it by 
+\begin{itemize}
+\item Power Law exponent $\alpha$
+
+\item Maximum eigenvalue $\lambda_{max}$ or Spectral Norm
+
+\item (Effective) Rank (hard rank, number of zero eigenvalues, etc)
+
+\end{itemize}
+
+
+
+\paragraph{Empirical Spectral Density}
+
+Evaluate over test set (training set too large)
+
+\subparagraph{Dependence on batch size}
+Jacobian during training is batch size dependent because of Batch Norm, other layers.
+Set model.eval(): do not include bathc norm.  Final Jacobian is not-batch size dependent
+
+
+\begin{equation}
+\rho(\lambda)\sim\lambda^{\alpha},\;\;\lambda\le\lambda_{max}  ,
+\end{equation}
+where $\lambda_{max}$ \emph{is} the largest eigenvalue of $\mathbf{X}=\mathbf{J}^{T}\mathbf{J}$.
+Each of these quantities is defined for sample Jacobian  $\mathbf{J}$ matrix.
+
+
+Compute diagonal first,  Jacobian diagonally dominant
+
+Both diagonal elements and ES are Heavy Tailed, but can be very different.
+Correlations matter.
+
+
+
+
+
