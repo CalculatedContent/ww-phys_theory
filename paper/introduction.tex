@@ -55,6 +55,23 @@ Here is a summary of our main results:
 
 \end{itemize}
 
+\john{
+The story so far: we are interested in metrics pertaining to neural networks
+ in which we can predict their ability to generalize. Recent work by Google [ICML 17]
+showed that MLPs can converge to 100\% training accuracy with the "random label transform"
+or shuffling of all the class labels over the training set. 
+
+First, we performed experiments where we computed the spectral density of the Hessian of MLPs trained normally on CIFAR10
+as well as those trained under the random label transformation. For shallow MLPs, the spectral density of the Hessian showed
+a larger index (number of negative eigenvalues), as well as more symmetry about zero and overall more roughness (need to quantify this better).
+For deeper MLPs, this difference between the spectral density of the random label transformed network and the normal network went away.
+
+In addition, we looked at 10 random initializations of MLPs trained normally and trained on the random label transform. We looked at cross-correlations
+between these initializations, between normal-normal, random-random, and normal-random (more about these experiments).
+
+ 
+}
+
 
 \paragraph{Organization of this paper.}
 
