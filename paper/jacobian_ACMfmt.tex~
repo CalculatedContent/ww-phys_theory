@@ -167,7 +167,6 @@ Funneled Energy Landscapes in Deep Neural Networks}
 \maketitle
 
 \input{introduction}
-\input{methods}
 \input{conclusion}
 
 %%
