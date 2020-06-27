@@ -1,0 +1,204 @@
+\documentclass{article}
+
+%%%%%%%%
+\usepackage{fullpage}
+\usepackage[top=2cm, bottom=4.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{lastpage}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{braket}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[ruled,vlined]{algorithm2e}
+\newtheorem{theorem}{Theorem}
+\usepackage{physics}
+
+
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\newcommand{\mtx}[1]{\mathbf{#1}}
+\newcommand{\m}[1]{\mathbf{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\delE}{\nabla_{\theta}\mathbb{E}_{p(x;\theta)}}
+\newcommand{\V}{\mathbb{V}_{p(x;\theta)}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\xx}{\frac{\langle x, x' \rangle}{\norm{x}\norm{x'}}}
+
+\newcommand{\dellogp}{\nabla_{\theta}\log p(x;\theta)}
+\newcommand{\delp}{\nabla_{\theta}p(x;\theta)}
+\newcommand{\p}{p(x;\theta)}
+\newcommand{\g}{g(\hat{\epsilon}, \theta)}
+\newcommand{\eps}{\epsilon}
+\newcommand{\nt}{\nabla_{\theta}}
+\newcommand{\kernel}{k(x_i, x_j)}
+\newcommand{\ft}{\mathcal{FT}}
+\newcommand{\Et}{\mathbb{E}_{\theta}}
+\newcommand{\one}{\mathbbm{1}}
+\newcommand{\dfz}{\frac{\partial f}{\partial z}}
+\newcommand{\det}{\text{det}}
+
+
+
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=blue,
+  linkbordercolor={0 0 1}
+}
+ 
+\renewcommand\lstlistingname{Algorithm}
+\renewcommand\lstlistlistingname{Algorithms}
+\def\lstlistingautorefname{Alg.}
+
+\lstdefinestyle{Python}{
+    language        = Python,
+    frame           = lines, 
+    basicstyle      = \footnotesize,
+    keywordstyle    = \color{blue},
+    stringstyle     = \color{green},
+    commentstyle    = \color{red}\ttfamily
+}
+
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+%%%%%%%%%%
+
+
+
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2019
+
+% ready for submission
+% \usepackage{neurips_2019}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2019}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+\usepackage[final]{neurips_2019}
+
+% to avoid loading the natbib package, add option nonatbib:
+%     \usepackage[nonatbib]{neurips_2019}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+
+\newcommand {\john}[1]{{\color{blue}\sf{[john: #1]}}}
+
+
+
+\newcommand{\matr}[1]{\mathbf{#1}}
+
+\title{Correlation of the Jacobian and Probability Flow}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
+\author{%
+  John Y.~Shin \\
+  Department of Computer Science\\
+  New York University\\
+  New York, NY 10033 \\
+  \texttt{jys308@nyu.edu} \\
+  % examples of more authors
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \AND
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\section{Computing the Jacobian}
+
+Suppose we have a Neural Network classifier $f : \R^{d} \rightarrow \R^{k}$, where $d$ is the dimensionality of the input and $k$ is the number of classes. We define the Jacobian matrix of the Neural Network as:
+
+\begin{equation}
+J(\matr{x}) = \nabla_\matr{x} f(\matr{x}) \in \R^{k} \times \R^{d}
+\end{equation}
+
+Or the derivative of the Neural Network with respect to the input. Suppose we have a training dataset of size $n$, with examples given as $(\matr{x}_1, \matr{x}_2, \cdots, \matr{x}_n)$, where $\matr{x}_i \in \R^d$. We can concatenate the $J(\matr{x})$ for each example into a vector:
+
+\begin{equation}
+\mathcal{J}_i = \text{flatten}(J(\matr{x}_i)) \in \R^{k \times d}}
+\end{equation}
+
+We can then form a matrix of these $\mathcal{J}_i$'s into a matrix $\mathcal{J} \in \R^n \times \R^{k \times d}$, which we will call the Jacobian matrix of the training dataset. Each row corresponds to a training example and the columns are a concatenation of the derivatives of each dimension of the output with each dimension of the input.
+
+As a classifier trained with a cross-entropy loss and with a softmax as the final output of the network, we can interpret the output of the network as a vector of probabilities:
+
+\begin{equation}
+f(\matr{x})  = (p(y_1| \matr{x}), p(y_2| \matr{x}), \cdots, p(y_n| \matr{x})) \in \R^k
+\end{equation}
+
+The Jacobian matrix of the neural network then becomes:
+
+\begin{equation}
+J(\matr{x}) = \nabla_{\matr{x}} f(\matr{x}) = (\nabla_{\matr{x}} p(y_1| \matr{x}), \nabla_{\matr{x}} p(y_2| x), \cdots, \nabla_{\matr{x}} p(y_k| \matr{x})) \in \R^k \times \R^d 
+\end{equation}
+
+For conciseness (and abuse) of notation, we can write the the flattened $\mathcal{J}_i$ in vector notation as:
+
+\begin{equation}
+\mathcal{J}_i = \nabla_{\matr{x}_i} p(\matr{y} | \matr{x_i}) \in \R^{k \times d}
+\end{equation}
+
+We can then build the correlation matrix of the Jacobian over the training dataset as:
+
+\begin{equation}
+M_{ij} = (\mathcal{J} \mathcal{J}^T)_{ij} = \nabla_{\matr{x}_i} p(\matr{y}|\matr{x}_i) \cdot \nabla_{\matr{x}_j} p(\matr{y}|\matr{x}_j) \cdot \in \R^{n \times n} 
+\end{equation}
+
+
+\bibliographystyle{unsrt}
+\bibliography{sample.bib}
+
+
+
+\end{document}
