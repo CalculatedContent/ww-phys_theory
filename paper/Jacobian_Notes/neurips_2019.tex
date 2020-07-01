@@ -50,6 +50,7 @@
 \newcommand{\one}{\mathbbm{1}}
 \newcommand{\dfz}{\frac{\partial f}{\partial z}}
 \newcommand{\det}{\text{det}}
+\newcommand{\Cov}{\mathrm{Cov}}
 
 
 
@@ -174,7 +175,7 @@ We can then form a matrix of these $\mathcal{J}_i$'s into a matrix $\mathcal{J} 
 As a classifier trained with a cross-entropy loss and with a softmax as the final output of the network, we can interpret the output of the network as a vector of probabilities:
 
 \begin{equation}
-f(\matr{x})  = (p(y_1| \matr{x}), p(y_2| \matr{x}), \cdots, p(y_n| \matr{x})) \in \R^k
+f(\matr{x})  = (p(y_1| \matr{x}), p(y_2| \matr{x}), \cdots, p(y_k| \matr{x})) \in \R^k
 \end{equation}
 
 The Jacobian matrix of the neural network then becomes:
@@ -186,14 +187,20 @@ J(\matr{x}) = \nabla_{\matr{x}} f(\matr{x}) = (\nabla_{\matr{x}} p(y_1| \matr{x}
 For conciseness (and abuse) of notation, we can write the the flattened $\mathcal{J}_i$ in vector notation as:
 
 \begin{equation}
-\mathcal{J}_i = \nabla_{\matr{x}_i} p(\matr{y} | \matr{x_i}) \in \R^{k \times d}
+\mathcal{J}_i = \nabla_{\matr{x}_i} p(\matr{y} | \matr{x}_i) \in \R^{k \times d}
 \end{equation}
 
 We can then build the correlation matrix of the Jacobian over the training dataset as:
 
 \begin{equation}
-M_{ij} = (\mathcal{J} \mathcal{J}^T)_{ij} = \nabla_{\matr{x}_i} p(\matr{y}|\matr{x}_i) \cdot \nabla_{\matr{x}_j} p(\matr{y}|\matr{x}_j) \cdot \in \R^{n \times n} 
+M_{ij} = (\mathcal{J} \mathcal{J}^T)_{ij} = \nabla_{\matr{x}_i} p(\matr{y}|\matr{x}_i) \cdot \nabla_{\matr{x}_j} p(\matr{y}|\matr{x}_j) \in \R^{n \times n} 
 \end{equation}
+
+\begin{theorem}
+testing
+\end{theorem}
+
+Suppose we have a random matrix, $M$, where each matrix element $M_{ij}$ is the covariance of two random variables, $\Cov(X_i, X_j)$. 
 
 
 \bibliographystyle{unsrt}
