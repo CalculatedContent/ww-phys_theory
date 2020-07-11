@@ -51,6 +51,7 @@
 \newcommand{\dfz}{\frac{\partial f}{\partial z}}
 \newcommand{\det}{\text{det}}
 \newcommand{\Cov}{\mathrm{Cov}}
+\newcommand {\nred}[1]{{\color{red}\sf{[#1]}}}
 
 
 
@@ -156,6 +157,78 @@
 \begin{abstract}
 \end{abstract}
 
+\section{Introduction}
+
+Over the past decade, Deep Neural Networks (DNNs) have proven remarkably effective on a wide range of tasks in  computer vision (CV), natural language processing (NLP), as well as other domains. Moreover, larger and deeper DNN models, with hundreds to thousands of layers, perform tasks seemingly impossible just a few years ago.  For example, the CV architecture ResNet \cite{he2016deep} has been successfuly trained with over 1000 layers, showing excellent generalization performance on a wide range of data sets (CIFAR10, CIFAR100, SVHN, ImageNet, etc.). Most recently, OpenAI released the NLP Language model GPT-3 \cite{brown2020language}, which has been trained on nearly a half trillion words, using 175 billion parameters, and achieving state-of-the-art (SOTA) performance on several NLP benchmarks.  
+
+The incredible size and depth of these models poses a new and deep theoretical challenges.
+[blah blah blah]
+Discuss Energy Landscape and  ruggedly convexity
+
+
+\nred{What has been done before}
+
+\nred{Cross Sections}
+We do have some insight into how the Energy Landscape behaves by visualizing 2-dimensional
+cross-sections of small models during training, such as ResNet25.
+Maybe can run ourselves ?
+
+\nred{Analysis of the Hessian}
+Not really informative.  Hessian only provides local information.
+
+There has been past work on showing that the smoothness of the Hessian as a function of the weights of the final trained model is correlated with good generalization \cite{sagun2017empirical, chaudhari2019entropy}. Recently, there has been work on leveraging stochastic methods for the computation of the empirical spectral density of the Hessian \cite{ghorbani2019investigation, yao2019pyhessian}, and further studies of the spectrum of the Hessian have brought some contention to this claim \cite{goldblum2019truth, maddox2020rethinking, granziol2020flatness}. 
+
+\cite{ghorbani2019investigation, goldblum2019truth, maddox2020rethinking, chaudhari2019entropy, sagun2017empirical, granziol2020flatness, yao2019pyhessian}
+
+\nred{Past Studies of the Jacobian}
+
+The Jacobian of the Neural Network, or the derivative of the Neural Network function with respect to either the data (input/output map) or the weights, has also been studied extensively, covering a wide range of topics, such as it's initialization \cite{pennington2017resurrecting, pennington2018emergence}, as a measure of generalization \cite{sokolic2017robust, novak2018sensitivity, jiang2018predicting, oymak2019generalization, oymak2019generalization, sanyal2019stable} as a way to regularize the network \cite{bagge2018tangent, hoffman2019robust}, it's spectrum \cite{pennington2017resurrecting, pennington2018emergence, ling2019spectrum, zhang2019one, tarnowski2019dynamical, wang2016analysis}, as a learning objective itself \cite{lorrainejacnet}, as a measure of robustness \cite{yu2018interpreting}, as well as it's connections to information geometry \cite{sokol2018information}.
+
+
+\cite{sokolic2017robust, pennington2017resurrecting, novak2018sensitivity, pennington2018emergence, bagge2018tangent, ling2019spectrum, jiang2018predicting, yu2018interpreting, hoffman2019robust, oymak2019generalization, sokol2018information, lorrainejacnet, oymak2019generalization, zhang2019one, sanyal2019stable, tarnowski2019dynamical, wang2016analysis}
+
+
+\nred{Empirical Generalization Metrics}
+Norm-based metrics such as WeightWatcher
+Correlated with generalization / test accuracy.
+Best metric is based on power law / heavy tailed.
+Not explicitly data dependent
+
+
+
+\nred{What needs to be done}
+Cross-Section is not a generalization metric, is not global
+
+Importance of unsupervised metrics: self training
+
+
+In order to characterize the Energy Landscape, traditional approaches attempt to count
+the number of local minima (i.e the complexity).  And while this is well for theoretical
+analysis (such as spin glass theory, random matrix theory, etc), numerically this
+is quite hard.  Especially for the massive production size DNNs in use today.
+
+Here, we suggest an new, alternative approach--to study the Empirical Spectral Density (ESD)
+of the data-dependent Jacobian, which is readily calculated with a single epoch of Backprop
+using any off-the-shelf toolkit such as TensorFlow, PyTorch, etc. 
+
+Similar to the weightwatcher studies..
+
+Show picture:  compare relatively random / flat vs  a deeply funneled convex Landscape ESDs
+
+random:  real world data, randomly labeled 
+
+
+
+Here is a summary of our main results:
+\begin{itemize}
+\item
+
+\item
+
+\item 
+
+\end{itemize}
+
 \section{Computing the Jacobian}
 
 Suppose we have a Neural Network classifier $f : \R^{d} \rightarrow \R^{k}$, where $d$ is the dimensionality of the input and $k$ is the number of classes. We define the Jacobian matrix of the Neural Network as:
@@ -202,7 +275,7 @@ testing
 
 
 \bibliographystyle{unsrt}
-\bibliography{sample.bib}
+\bibliography{main.bib}
 
 
 
