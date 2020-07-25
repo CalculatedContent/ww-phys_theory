@@ -13,13 +13,14 @@ import matplotlib.pyplot as plt
 
 
 def get_data(
-		batch_size=100, 
+		train_batch_size=100,
+                test_batch_size=100,
 		train_range=None, 
 		test_range=None, 
 		random_labels=False, 
 		seed = 0):
 	"""Get CIFAR10 data. If random_labels=True, randomizes the labels. 
-	Optional Parameters: batch_size (default: 100), train_range (default: None), test_range (default: None), random_labels (default: False), seed (default: None)
+        Optional Parameters: train_batch_size (default: 100), test_batch_size (default:100), train_range (default: None), test_range (default: None), random_labels (default: False), seed (default: None)
 	Return: train dataset, test dataset, train loader, test loader
 	"""
 	normalize = transforms.Normalize(mean=[x/255.0 for x in [125.3, 123.0, 113.9]], std=[x / 255.0 for x in [63.0, 62.1, 66.7]])
@@ -61,12 +62,12 @@ def get_data(
 
 	train_loader = DataLoader(
 		dataset=train_dataset, 
-		batch_size=batch_size,
+		batch_size=train_batch_size,
 		num_workers=4,
 		shuffle=False)
 	test_loader = DataLoader(
 		dataset=test_dataset, 
-		batch_size=batch_size,
+		batch_size=test_batch_size,
 		num_workers=4,
 		shuffle=False)
 	return train_dataset, test_dataset, train_loader, test_loader
