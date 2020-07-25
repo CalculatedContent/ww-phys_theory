@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 
 def get_data(
-		train_batch_size=100,
+	        train_batch_size=100,
                 test_batch_size=100,
 		train_range=None, 
 		test_range=None, 
@@ -73,6 +73,22 @@ def get_data(
 	return train_dataset, test_dataset, train_loader, test_loader
 
 
+
+def compute_acc(model, data_loader):
+    """Compute the accuracy of a classifier given the model, as a percentage.
+    Input: model, data_loader
+    Return: accuracy (%)
+    """
+    correct_pred, num_examples = 0, 0
+    model.eval()
+    for i, (features, targets) in enumerate(data_loader):
+        features, targets = features.to(device), targets.to(device)
+        probas = model(features)
+        _, predicted_labels = torch.max(probas, 1)
+        num_examples += targets.size(0)
+        assert predicted_labels.size() == targets.size()
+        correct_pred += (predicted_labels == targets).sum()
+    return correct_pred.float()/num_examples * 100
 
 
 def get_esd_plot(eigenvalues, weights):
