@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 
 def get_data(
-	        train_batch_size=100,
+                train_batch_size=100,
                 test_batch_size=100,
 		train_range=None, 
 		test_range=None, 
@@ -74,9 +74,9 @@ def get_data(
 
 
 
-def compute_acc(model, data_loader):
+def compute_acc(model, data_loader, device):
     """Compute the accuracy of a classifier given the model, as a percentage.
-    Input: model, data_loader
+    Input: model, data_loader, device
     Return: accuracy (%)
     """
     correct_pred, num_examples = 0, 0
