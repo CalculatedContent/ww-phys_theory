@@ -34,13 +34,20 @@ and not the diag_j() methods in the jacobian.py lib
 
 - [Make_n_Save_JJMat_ResNets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Make_n_Save_JJMat_ResNets.ipynb)   Make ResNet Jacobians correlation matrix JJMat in memory and save to Google Drive
 
-- [Make_Batched_n_Save_JJMat_Resnets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Make_n_Save_JJMat_ResNets.ipynb)   Make ResNet Jacobians correlation matrix JJMat in memory **in batch** for large models like ResNet1001 save to Google Drive, for SVD analysis later
-
-
 #### Batched Calculations
 
 Long calculations of very large Jacobians have been batches and the
 correlation matrix $\mathbf{J}^{T}\mathbf{J}$ stored on Google Drive
+
+- [Make_Batched_n_Save_JJMat_Resnets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Make_n_Save_JJMat_ResNets.ipynb)   Make ResNet Jacobians correlation matrix JJMat in memory **in batch** for large models like ResNet1001 save to Google Drive, for SVD analysis later
+
+- [Full_Test_Jacobians_Resnets_SVD.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Full_Test_Jacobians_Resnets_SVD.ipynb) Basically the same as the above Make_Batched_n_Save_JJMat_Resnets.ipynb.  Need to review the differences, usually I run multple copies of this at once on Google Colab.  Generates inputs for the notebook below
+
+- [Full_Test_Jacobians_Resnets_SVD_only.ipynb.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Full_Test_Jacobians_Resnets_SVD_only.ipynb) Analysis of Full teest data JJMat 
+
+
+
+
 
 
 
