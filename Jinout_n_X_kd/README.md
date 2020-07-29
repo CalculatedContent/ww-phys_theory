@@ -21,13 +21,13 @@ and not the diag_j() methods in the jacobian.py lib
 - [J_Diag_PLfits.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/J_Diag_PLfits.ipynb) comparison of PL alpha fits on ResNet CIFAR10 models 
   Reads diagonal  $\mathbf{J}^{T}\mathbf{J}$ from local  csv files on Google Drive
 
-- Jacobians_Resnets_old.ipynb :  old code for computing Jacobian diagonal.  
+- [Jacobians_Resnets_old.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Jacobians_Resnets_old.ipynb)  old code for computing Jacobian diagonal.  
   Did *not* set model.eval() so results may be off
 
 
 #### Full Jacobians
 
-- Make_n_Save_JJMat_ResNets.ipynb :   Make ResNet Jacobians correlation matrix JJMat in memory and save to Google Drive
+- [Make_n_Save_JJMat_ResNets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Make_n_Save_JJMat_ResNets.ipynb)   Make ResNet Jacobians correlation matrix JJMat in memory and save to Google Drive
 
 
 #### Batched Calculations
