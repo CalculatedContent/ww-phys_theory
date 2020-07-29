@@ -21,6 +21,7 @@ and not the diag_j() methods in the jacobian.py lib
   Did *not* set model.eval() so results may be off.  Replaced by Fast_J_Diag_Resnets.ipynb
 
   [Fast_J_Diag_Resnets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Fast_J_Diag_Resnets.ipynb)  Computing Jacobian diagonal using fast code 
+  Saves models files:   /content/drive/My Drive/resnets_fast/Jdiag_fast_{}__{}.csv   
   Does not use jacobian.py library yet.   (previously FastJacobianDiag_Resnets.ipynb)  
 
 - [J_Diag_PLfits.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/J_Diag_PLfits.ipynb) comparison of PL alpha fits on ResNet CIFAR10 models 
