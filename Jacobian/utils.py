@@ -13,14 +13,14 @@ import matplotlib.pyplot as plt
 
 
 def get_data(
-                train_batch_size=100,
-                test_batch_size=100,
+		train_batch_size=100,
+		test_batch_size=100,
 		train_range=None, 
 		test_range=None, 
 		random_labels=False, 
 		seed = 0):
 	"""Get CIFAR10 data. If random_labels=True, randomizes the labels. 
-        Optional Parameters: train_batch_size (default: 100), test_batch_size (default:100), train_range (default: None), test_range (default: None), random_labels (default: False), seed (default: None)
+	Inputs: train_batch_size (default: 100), test_batch_size (default:100), train_range (default: None), test_range (default: None), random_labels (default: False), seed (default: None)
 	Return: train dataset, test dataset, train loader, test loader
 	"""
 	normalize = transforms.Normalize(mean=[x/255.0 for x in [125.3, 123.0, 113.9]], std=[x / 255.0 for x in [63.0, 62.1, 66.7]])
@@ -75,20 +75,20 @@ def get_data(
 
 
 def compute_acc(model, data_loader, device):
-    """Compute the accuracy of a classifier given the model, as a percentage.
-    Input: model, data_loader, device
-    Return: accuracy (%)
-    """
-    correct_pred, num_examples = 0, 0
-    model.eval()
-    for i, (features, targets) in enumerate(data_loader):
-        features, targets = features.to(device), targets.to(device)
-        probas = model(features)
-        _, predicted_labels = torch.max(probas, 1)
-        num_examples += targets.size(0)
-        assert predicted_labels.size() == targets.size()
-        correct_pred += (predicted_labels == targets).sum()
-    return correct_pred.float()/num_examples * 100
+	"""Compute the accuracy of a classifier given the model, as a percentage.
+	Input: model, data_loader, device
+	Return: accuracy (%)
+	"""
+	correct_pred, num_examples = 0, 0
+	model.eval()
+	for i, (features, targets) in enumerate(data_loader):
+		features, targets = features.to(device), targets.to(device)
+		probas = model(features)
+		_, predicted_labels = torch.max(probas, 1)
+		num_examples += targets.size(0)
+		assert predicted_labels.size() == targets.size()
+		correct_pred += (predicted_labels == targets).sum()
+	return correct_pred.float()/num_examples * 100
 
 
 def get_esd_plot(eigenvalues, weights):
