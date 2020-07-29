@@ -1,6 +1,6 @@
 ### Colab Notebooks for  input output Jacobian, shaped by n X kd
 
-(Also jut called Jacobian in other folders)
+(Also just called Jacobian in other folders)
 
 - n:  number of test (or training) data ppints
 - k:  number of output classes 
@@ -16,6 +16,20 @@ Jacobian ESDs computed over test data in full (using LAPAC eigh)
 
 refers to diagonal elements of $\mathbf{J}^{T}\mathbf{J}$
 and not the diag_j() methods in the jacobian.py lib
+
+- J_Diag_PLfits.ipynb :  comparison of PL alpha fits on ResNet CIFAR10 models 
+
+  Reads diagonal  $\mathbf{J}^{T}\mathbf{J}$ from local  csv files on Google Drive
+
+
+
+
+#### Batched Calculations
+
+Long calculations of very large Jacobians have been batches and the
+correlation matrix $\mathbf{J}^{T}\mathbf{J}$ stored on Google Drive
+
+
 
 
 
