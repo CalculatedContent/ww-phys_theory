@@ -17,7 +17,8 @@ Jacobian ESDs computed over test data in full (using LAPAC eigh)
 refers to diagonal elements of $\mathbf{J}^{T}\mathbf{J}$
 and not the diag_j() methods in the jacobian.py lib
 
-- J_Diag_PLfits.ipynb :  comparison of PL alpha fits on ResNet CIFAR10 models 
+
+- [J_Diag_PLfits.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/J_Diag_PLfits.ipynb) comparison of PL alpha fits on ResNet CIFAR10 models 
   Reads diagonal  $\mathbf{J}^{T}\mathbf{J}$ from local  csv files on Google Drive
 
 - Jacobians_Resnets_old.ipynb :  old code for computing Jacobian diagonal.  
