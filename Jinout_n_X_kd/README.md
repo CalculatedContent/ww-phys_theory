@@ -26,7 +26,7 @@ and not the diag_j() methods in the jacobian.py lib
 
 #### Full Jacobians
 
-### Make_n_Save_JJMat_ResNets.ipynb :   Make ResNet Jacobians correlation matrix JJMat in memory and save to Google Drive
+- Make_n_Save_JJMat_ResNets.ipynb :   Make ResNet Jacobians correlation matrix JJMat in memory and save to Google Drive
 
 
 #### Batched Calculations

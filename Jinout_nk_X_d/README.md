@@ -1,4 +1,4 @@
-### Colab Notebooks for  input output Jacobian, shaped by nk x d
+### Colab Notebooks for  input output Jacobian, shaped by nk X d
 
 - n:  number of test (or training) data ppints
 - k:  number of output classes 
