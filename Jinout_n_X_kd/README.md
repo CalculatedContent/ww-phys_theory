@@ -27,7 +27,7 @@ and not the diag_j() methods in the jacobian.py lib
 - [J_Diag_PLfits.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/J_Diag_PLfits.ipynb) comparison of PL alpha fits on ResNet CIFAR10 models 
   Reads diagonal  $\mathbf{J}^{T}\mathbf{J}$ from local  csv files on Google Drive
 
-
+- [Analyze_Diag_Jacobians.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Analyze_Diag_Jacobians.ipynb) Another older notebook used to analyze the diagonal Jacobian
 
 
 #### Full Jacobians
