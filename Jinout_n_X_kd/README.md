@@ -45,6 +45,7 @@ correlation matrix $\mathbf{J}^{T}\mathbf{J}$ stored on Google Drive
 
 - [Full_Test_Jacobians_Resnets_SVD_only.ipynb.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Full_Test_Jacobians_Resnets_SVD_only.ipynb) Analysis of Full teest data JJMat 
 
+- [Full_JJMat_Batched_Check.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Full_JJMat_Batched_Check.ipynb) Check that the batched and in-memory full JJMat calculations
 
 
 
