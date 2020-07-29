@@ -24,6 +24,11 @@ and not the diag_j() methods in the jacobian.py lib
   Did *not* set model.eval() so results may be off
 
 
+#### Full Jacobians
+
+### Make_n_Save_JJMat_ResNets.ipynb :   Make ResNet Jacobians correlation matrix JJMat in memory and save to Google Drive
+
+
 #### Batched Calculations
 
 Long calculations of very large Jacobians have been batches and the
