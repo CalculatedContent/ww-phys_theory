@@ -34,6 +34,8 @@ and not the diag_j() methods in the jacobian.py lib
 
 - [Make_n_Save_JJMat_ResNets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Make_n_Save_JJMat_ResNets.ipynb)   Make ResNet Jacobians correlation matrix JJMat in memory and save to Google Drive
 
+- [Make_Batched_n_Save_JJMat_Resnets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Make_n_Save_JJMat_ResNets.ipynb)   Make ResNet Jacobians correlation matrix JJMat in memory **in batch** for large models like ResNet1001 save to Google Drive, for SVD analysis later
+
 
 #### Batched Calculations
 
