@@ -17,12 +17,16 @@ Jacobian ESDs computed over test data in full (using LAPAC eigh)
 refers to diagonal elements of $\mathbf{J}^{T}\mathbf{J}$
 and not the diag_j() methods in the jacobian.py lib
 
+- [Jacobians_Resnets_old.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Jacobians_Resnets_old.ipynb)  old code for computing Jacobian diagonal.  
+  Did *not* set model.eval() so results may be off.  Replaced by Fast_J_Diag_Resnets.ipynb
+
+  [Fast_J_Diag_Resnets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Fast_J_Diag_Resnets.ipynb)  Computing Jacobian diagonal using fast code 
+  Does not use jacobian.py library yet.   (previously FastJacobianDiag_Resnets.ipynb)  
 
 - [J_Diag_PLfits.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/J_Diag_PLfits.ipynb) comparison of PL alpha fits on ResNet CIFAR10 models 
   Reads diagonal  $\mathbf{J}^{T}\mathbf{J}$ from local  csv files on Google Drive
 
-- [Jacobians_Resnets_old.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Jacobians_Resnets_old.ipynb)  old code for computing Jacobian diagonal.  
-  Did *not* set model.eval() so results may be off
+
 
 
 #### Full Jacobians
