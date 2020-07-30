@@ -52,8 +52,10 @@ correlation matrix **J<sup>T</sup>J** stored on Google Drive
 
 ### Results so far
 
-The Jacobian has been form several pretrained ResNet models, on CIFAR10m and CIFAR100, using the test dat
+The Jacobian has been form several pretrained ResNet models, on CIFAR10 and CIFAR100, using the test dat
 
 We have examined both the digaonal elements of **J<sup>T</sup>J** as well as the full ESD
 
-![Diagonal JJ for ResNet CIFAR10](img/J_Diag_resnet_cifar10.png?raw=true)
+Note: older and newer results differ, and 
+![Power Law Fit to Diagonal JJ for ResNet CIFAR10](img/J_Diag_alphas_resnet_cifar10.png?raw=true)
+![Max Diagonal JJ for ResNet CIFAR10](img/J_Diag_maxJJ_resnet_cifar10.png?raw=true)
