@@ -58,6 +58,6 @@ We have examined both the digaonal elements of **J<sup>T</sup>J** as well as the
 
 Note: older and newer results differ, and 
 
-<img src="img/J_Diag_alphas_resnet_cifar10.png" width=300 align=right>
+<img src="img/J_Diag_alphas_resnet_cifar10.png" width=300 align=left>
 
-<img src="img/J_Diag_maxJJ_resnet_cifar10.png" width=300 align=right>
+<img src="img/J_Diag_maxJJ_resnet_cifar10.png" width=300 align=left>
