@@ -57,5 +57,7 @@ The Jacobian has been form several pretrained ResNet models, on CIFAR10 and CIFA
 We have examined both the digaonal elements of **J<sup>T</sup>J** as well as the full ESD
 
 Note: older and newer results differ, and 
+<img src="img/J_Diag_alphas_resnet_cifar10.png" width=100 align=center>
+
 ![Power Law Fit to Diagonal JJ for ResNet CIFAR10](img/J_Diag_alphas_resnet_cifar10.png?raw=true){ width=25% }
 ![Max Diagonal JJ for ResNet CIFAR10](img/J_Diag_maxJJ_resnet_cifar10.png?raw=true){ width=25% }
