@@ -1,4 +1,6 @@
-### Colab Notebooks for  input output Jacobian, shaped by n X kd
+### Orginal Jacobian Colab Notebooks 
+
+#### for  input output Jacobian, shaped by n X kd
 
 (Also just called Jacobian in other folders)
 
@@ -14,7 +16,7 @@ Jacobian ESDs computed over test data in full (using LAPAC eigh)
 
 #### Diagonal Jaocobian
 
-refers to diagonal elements of $\mathbf{J}^{T}\mathbf{J}$
+refers to diagonal elements of **J<sup>T</sup>J**
 and not the diag_j() methods in the jacobian.py lib
 
 - [Jacobians_Resnets_old.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Jacobians_Resnets_old.ipynb)  old code for computing Jacobian diagonal.  
@@ -25,7 +27,7 @@ and not the diag_j() methods in the jacobian.py lib
   Does not use jacobian.py library yet.   (previously FastJacobianDiag_Resnets.ipynb)  
 
 - [J_Diag_PLfits.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/J_Diag_PLfits.ipynb) comparison of PL alpha fits on ResNet CIFAR10 models 
-  Reads diagonal  $\mathbf{J}^{T}\mathbf{J}$ from local  csv files on Google Drive
+  Reads diagonal  **J<sup>T</sup>J** from local  csv files on Google Drive
 
 - [Analyze_Diag_Jacobians.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Analyze_Diag_Jacobians.ipynb) Another older notebook used to analyze the diagonal Jacobian
 
@@ -37,7 +39,7 @@ and not the diag_j() methods in the jacobian.py lib
 #### Batched Calculations
 
 Long calculations of very large Jacobians have been batches and the
-correlation matrix $\mathbf{J}^{T}\mathbf{J}$ stored on Google Drive
+correlation matrix **J<sup>T</sup>J** stored on Google Drive
 
 - [Make_Batched_n_Save_JJMat_Resnets.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Make_n_Save_JJMat_ResNets.ipynb)   Make ResNet Jacobians correlation matrix JJMat in memory **in batch** for large models like ResNet1001 save to Google Drive, for SVD analysis later
 
@@ -48,9 +50,10 @@ correlation matrix $\mathbf{J}^{T}\mathbf{J}$ stored on Google Drive
 - [Full_JJMat_Batched_Check.ipynb](https://github.com/CalculatedContent/ww-phys_theory/blob/master/Jinout_n_X_kd/Full_JJMat_Batched_Check.ipynb) Check that the batched and in-memory full JJMat calculations
 
 
+### Results so far
 
+The Jacobian has been form several pretrained ResNet models, on CIFAR10m and CIFAR100, using the test dat
 
+We have examined both the digaonal elements of **J<sup>J</sup>** as well as the full ESD
 
-
-
-
+![Diagonal JJ for ResNet CIFAR10](img/J_Diag_resnet_cifar10.png?raw=true)
