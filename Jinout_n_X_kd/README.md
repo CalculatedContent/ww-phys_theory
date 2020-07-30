@@ -66,7 +66,7 @@ We have examined both the digaonal elements of **J<sup>T</sup>J** as well as the
 <br>
 <h4> Full ESD CIFAR10 </h4>
 Full ESD Alphas for CIFAR100
-<img src="img/J_full_alphas_resnet_cifar10.png" width=300 align=left/>
+<img src="img/J_full_alphas_resnet_cifar10.png" width=400 align=left/>
 
 <br>
 <h4> Full ESD CIFAR100 </h4>
