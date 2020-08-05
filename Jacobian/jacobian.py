@@ -52,11 +52,13 @@ def construct_diagJ(
 		batch_size,
 		device='cuda:0',
 		num_classes=10,
-		data_dim = 3*32*32):
+		data_dim = 3*32*32,
+		class_label_filter = None
+		):
 	"""Constructs the diagonal J matrix from batches.
 
 	Input: Model, data_loader, batch_size, device, num_classes, data_dim.
-	Optional Arguments: device, num_classes (default 10), data_dim (default: 3072).
+	Optional Arguments: device, num_classes (default 10), data_dim (default: 3072), class_label_filter (default: None).
 	Return: Diagonal Jacobian of dimension (len(data_loader)*batch_size, num_classes*data_dim).
 	"""
 	Js = []
@@ -64,12 +66,22 @@ def construct_diagJ(
 	model = model.to(device)
 
 	for batch, data in enumerate(data_loader):
-		features, _ = data
-		inputs = features.to(device)
-		inputs.requires_grad=True
-		outputs = model(inputs)
-		J = batch_diagJ(inputs, outputs)
-		Js.append(J)
+		features, label = data
+		if class_label_filter:
+			indices = [i for i, x in enumerate(label) if x == class_label_filter]
+			features = features[indices]
+			inputs = features.to(device)
+			inputs.requires_grad=True
+			outputs = model(inputs)
+			J = batch_diagJ(inputs, outputs)
+			Js.append(J)
+		else:
+			inputs = features.to(device)
+			inputs.requires_grad=True
+			outputs = model(inputs)
+			J = batch_diagJ(inputs, outputs)
+			Js.append(J)
+
 
 	full_J = torch.stack(Js, dim=0)
 	full_J = full_J.reshape(len(data_loader)*batch_size, num_classes*data_dim)
