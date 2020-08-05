@@ -1,8 +1,8 @@
 """
-Helper Functions to compute the spectrum of J^T @ J and J @ J^T, 
+Helper Functions to compute the spectrum of J^T @ J and J @ J^T,
 were J is the Jacobian of the Neural Network J = df(x)/dx as a function of it's input (the data, not the weights).
-We clarify some nomenclature. The diagonal Jacobian is constructed of terms only of the form dJ(x_i)/dx_i. 
-It will be of dimension training_data_size*(output_dim*data_dim). The full J will contains terms of the form 
+We clarify some nomenclature. The diagonal Jacobian is constructed of terms only of the form dJ(x_i)/dx_i.
+It will be of dimension training_data_size*(output_dim*data_dim). The full J will contains terms of the form
 dJ(x_i)/dx_j, which will be of dimension training_data_size*(output_dim*training_data_size*data_dim)
 The diagonal OF M = J @ J^T or M = J^T @ J is the main diagonal of M.
 """
@@ -18,7 +18,7 @@ def batch_diagJ(inputs, output):
 	Input: Input for the function for which the Jacobian will
 	computed. It will be batch_size*data_dim. Make sure that the
 	input is flagged as requires_grad=True with the torch.autograd.Variable
-	wrapper. 
+	wrapper.
 
 	Output: Output of the function for which the Jacobian will
 	be computed. It will be batch_size*classes
@@ -47,11 +47,11 @@ def batch_diagJ(inputs, output):
 	return torch.transpose(jacobian, dim0=0, dim1=1)
 
 def construct_diagJ(
-		model, 
-		data_loader, 
-		batch_size, 
-		device='cuda:0', 
-		num_classes=10, 
+		model,
+		data_loader,
+		batch_size,
+		device='cuda:0',
+		num_classes=10,
 		data_dim = 3*32*32):
 	"""Constructs the diagonal J matrix from batches.
 
@@ -77,14 +77,14 @@ def construct_diagJ(
 	return full_J
 
 def diagonal_JJT(
-		model, 
-		data_loader, 
-		batch_size, 
-		num_classes=10, 
-		device='cuda:0', 
+		model,
+		data_loader,
+		batch_size,
+		num_classes=10,
+		device='cuda:0',
 		data_dim=3*32*32):
 	"""Compute the main diagonal of JJ^T, where J is the diagonal Jacobian.
-	
+
 	Input: Model, data_loader, batch_size
 	Optional arguments: num_classes (default: 10), device (default: cuda:0), data_dim (default: 3072)
 	Return: Array of len(data_loader)*batch_size with the main diagonal of JJ^T.
@@ -129,7 +129,7 @@ def sketch_jl_JJT(J, dim=5000, device="cuda:0"):
 
 def power_method(M, iterations=100, device="cuda:0"):
 	"""Computes the top eigenvalue of a matrix. This needs to be computed for kernel PM.
-	
+
 	Input: the Jacobian correlation matrix, M
 	Optional: iterations (default: 100), device (default: cuda:0)
 	Return: the largest eigenvalue of M.
@@ -171,7 +171,7 @@ def orthonormal(v_list):
 
 def slq(M, n_vec=20, m=100, device="cuda:0"):
 	"""An implemention of the Stochastic Lanczos Quadrature to compute the spectral density of M = JJ^T.
-	
+
 	Input: the correlation matrix of the Jacobian M.
 	Optional: number of random vectors, n_vec (default: 20)
 	number of iterations, m (default: 100)
@@ -205,7 +205,7 @@ def slq(M, n_vec=20, m=100, device="cuda:0"):
 					v = w/b
 				else:
 					#This old bit of code assumes that with high probability, a new random vector will be orthogonal to others.
-					# Leaving in for posterity. 
+					# Leaving in for posterity.
 					#v = torch.randint(high=2, size=(n,), device=device, dtype=torch.float32)
 					#v[v==0] = -1 #make it rademacher
 					#v = v/torch.norm(v)
