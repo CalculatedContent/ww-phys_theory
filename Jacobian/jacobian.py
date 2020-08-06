@@ -53,12 +53,13 @@ def construct_diagJ(
 		device='cuda:0',
 		num_classes=10,
 		data_dim = 3*32*32,
-		class_label_filter = None
+		class_label_filter = None,
+		example_x_class_rowspace = False
 		):
 	"""Constructs the diagonal J matrix from batches.
 
 	Input: Model, data_loader, batch_size, device, num_classes, data_dim.
-	Optional Arguments: device, num_classes (default 10), data_dim (default: 3072), class_label_filter (default: None).
+	Optional Arguments: device, num_classes (default 10), data_dim (default: 3072), class_label_filter (default: None), example_x_class_rowspace (default: False)
 	Return: Diagonal Jacobian of dimension (len(data_loader)*batch_size, num_classes*data_dim).
 	"""
 	Js = []
@@ -81,13 +82,20 @@ def construct_diagJ(
 			outputs = model(inputs)
 			J = batch_diagJ(inputs, outputs)
 			Js.append(J)
+	#Need to double check this reshaping is correct.
 	if class_label_filter == None:
 		full_J = torch.stack(Js, dim=0)
-		full_J = full_J.reshape(len(data_loader)*batch_size, num_classes*data_dim)
+		if example_x_class_rowspace == False:
+			full_J = full_J.reshape(len(data_loader)*batch_size, num_classes*data_dim)
+		else:
+			full_J = full_J.reshape(len(data_loader)*batch_size*num_classes, data_dim)
 	else:
 		full_J = torch.cat(Js)
-		examples = full_J.shape[0]
-		full_J = full_J.reshape(examples, num_classes*data_dim)
+		if example_x_class_rowspace == False:
+			examples = full_J.shape[0]
+			full_J = full_J.reshape(examples, num_classes*data_dim)
+		else:
+			full_J = full_J.reshape(examples*num_classes, data_dim)
 	return full_J
 
 def diagonal_JJT(
