@@ -67,7 +67,13 @@ def construct_diagJ(
 
 	for batch, data in enumerate(data_loader):
 		features, label = data
-		if class_label_filter:
+		if class_label_filter == None:
+			inputs = features.to(device)
+			inputs.requires_grad=True
+			outputs = model(inputs)
+			J = batch_diagJ(inputs, outputs)
+			Js.append(J)
+		else:
 			indices = [i for i, x in enumerate(label) if x == class_label_filter]
 			features = features[indices]
 			inputs = features.to(device)
@@ -75,21 +81,13 @@ def construct_diagJ(
 			outputs = model(inputs)
 			J = batch_diagJ(inputs, outputs)
 			Js.append(J)
-		else:
-			inputs = features.to(device)
-			inputs.requires_grad=True
-			outputs = model(inputs)
-			J = batch_diagJ(inputs, outputs)
-			Js.append(J)
-
-	if class_label_filter:
+	if class_label_filter == None:
+		full_J = torch.stack(Js, dim=0)
+		full_J = full_J.reshape(len(data_loader)*batch_size, num_classes*data_dim)
+	else:
 		full_J = torch.cat(Js)
 		examples = full_J.shape[0]
 		full_J = full_J.reshape(examples, num_classes*data_dim)
-	else:
-		full_J = torch.stack(Js, dim=0)
-		full_J = full_J.reshape(len(data_loader)*batch_size, num_classes*data_dim)
-
 	return full_J
 
 def diagonal_JJT(
