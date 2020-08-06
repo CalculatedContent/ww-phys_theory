@@ -91,8 +91,8 @@ def construct_diagJ(
 			full_J = full_J.reshape(len(data_loader)*batch_size*num_classes, data_dim)
 	else:
 		full_J = torch.cat(Js)
+		examples = full_J.shape[0]
 		if example_x_class_rowspace == False:
-			examples = full_J.shape[0]
 			full_J = full_J.reshape(examples, num_classes*data_dim)
 		else:
 			full_J = full_J.reshape(examples*num_classes, data_dim)
