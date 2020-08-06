@@ -82,9 +82,13 @@ def construct_diagJ(
 			J = batch_diagJ(inputs, outputs)
 			Js.append(J)
 
-
-	full_J = torch.stack(Js, dim=0)
-	full_J = full_J.reshape(len(data_loader)*batch_size, num_classes*data_dim)
+	if class_label_filter:
+		full_J = torch.cat(Js)
+		examples = full_J.shape[0]
+		full_J = full_J.reshape(examples, num_classes*data_dim)
+	else:
+		full_J = torch.stack(Js, dim=0)
+		full_J = full_J.reshape(len(data_loader)*batch_size, num_classes*data_dim)
 
 	return full_J
 
