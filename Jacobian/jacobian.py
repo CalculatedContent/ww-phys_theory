@@ -4,7 +4,7 @@ were J is the Jacobian of the Neural Network J = df(x)/dx as a function of it's 
 We clarify some nomenclature. The diagonal Jacobian is constructed of terms only of the form dJ(x_i)/dx_i.
 It will be of dimension training_data_size*(output_dim*data_dim). The full J will contains terms of the form
 dJ(x_i)/dx_j, which will be of dimension training_data_size*(output_dim*training_data_size*data_dim)
-The diagonal OF M = J @ J^T or M = J^T @ J is the main diagonal of M.
+The diagonal of M = J @ J^T or M = J^T @ J is the main diagonal of M.
 """
 
 import torch
@@ -282,7 +282,7 @@ def kernel_pm(M, m= 20, n_vec=100, device="cuda:0", power_it=100):
 	print("Finished top eigenvalue, computing mu")
 
 	# We want to rescale M = (M - ((b + a)/2)*I)/((b-a)/2). M needs to be rescaled for Chebyshev basis
-	# This is done in a for loop so I does not need to be made in memory.
+	# This is done in a for loop so it does not need to be made in memory.
 	print("Rescaling M")
 	for i in range(n):
 	    M[i][i] = M[i][i] - (b+a)/2
