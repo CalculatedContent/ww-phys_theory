@@ -74,20 +74,32 @@ def get_data(
 
 
 
-def compute_acc(model, data_loader, device):
+def compute_acc(model, data_loader, device, class_label_filter=None):
 	"""Compute the accuracy of a classifier given the model, as a percentage.
 	Input: model, data_loader, device
 	Return: accuracy (%)
 	"""
 	correct_pred, num_examples = 0, 0
 	model.eval()
-	for i, (features, targets) in enumerate(data_loader):
-		features, targets = features.to(device), targets.to(device)
-		probas = model(features)
-		_, predicted_labels = torch.max(probas, 1)
-		num_examples += targets.size(0)
-		assert predicted_labels.size() == targets.size()
-		correct_pred += (predicted_labels == targets).sum()
+	if class_label_filter == None:
+		for i, (features, targets) in enumerate(data_loader):
+			features, targets = features.to(device), targets.to(device)
+			probas = model(features)
+			_, predicted_labels = torch.max(probas, 1)
+			num_examples += targets.size(0)
+			assert predicted_labels.size() == targets.size()
+			correct_pred += (predicted_labels == targets).sum()
+	else:
+		for i, (features, targets) in enumerate(data_loader):
+			indices = [i for i, x in enumerate(targets) if x == class_label_filter]
+			features = features[indices].to(device)
+			targets = targets[indices].to(device)
+			probas = model(features)
+			_, predicted_labels = torch.max(probas, 1)
+			num_examples += targets.size(0)
+			assert predicted_labels.size() == targets.size()
+			correct_pred += (predicted_labels == targets).sum()
+
 	return correct_pred.float()/num_examples * 100
 
 
